@@ -12,7 +12,7 @@ UABCharacterStatComponent::UABCharacterStatComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 	bWantsInitializeComponent = true;	// 이 설정을 해줘야 컴포넌트의 초기화가 이루어진다.
 
-	Level = 15;
+	Level = 1;
 }
 
 // Called when the game starts
@@ -42,8 +42,7 @@ void UABCharacterStatComponent::SetNewLevel(int32 NewLevel)
 	if (nullptr != CurrentStatData)
 	{
 		Level = NewLevel;
-		CurrentHP = CurrentStatData->MaxHP;
-		//SetHP(CurrentStatData->MaxHP);
+		SetHP(CurrentStatData->MaxHP);
 	}
 	else
 	{
@@ -54,27 +53,22 @@ void UABCharacterStatComponent::SetNewLevel(int32 NewLevel)
 void UABCharacterStatComponent::SetDamage(float NewDamage)
 {
 	ABCHECK(nullptr != CurrentStatData);
-
-	CurrentHP = FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP);
-
-	if (CurrentHP < KINDA_SMALL_NUMBER)
-	{
-		OnHPIsZero.Broadcast();
-	}
-
-	//SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
+	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
 }
 
-//void UABCharacterStatComponent::SetHP(float NewHP)
-//{
-//	CurrentHP = NewHP;
-//	OnHPChanged.Broadcast();
-//	if (CurrentHP < KINDA_SMALL_NUMBER)
-//	{
-//		CurrentHP = 0.0f;
-//		OnHPIsZero.Broadcast();
-//	}
-//}
+void UABCharacterStatComponent::SetHP(float NewHP)
+{
+	CurrentHP = NewHP;
+	OnHPChanged.Broadcast();
+
+	// float 값을 0과 비교할 때는 미세한 오차 범위 내에 있는지를 보고 판단하는 것이 좋다.
+	// 언리얼 엔진은 무시 가능한 오차를 측정할 때 사용하도록 KINDA_SMALL_NUMBER 라는 매크로를 제공한다.
+	if (CurrentHP < KINDA_SMALL_NUMBER)
+	{
+		CurrentHP = 0.0f;
+		OnHPIsZero.Broadcast();
+	}
+}
 
 float UABCharacterStatComponent::GetAttack()
 {
@@ -82,9 +76,9 @@ float UABCharacterStatComponent::GetAttack()
 	return CurrentStatData->Attack;
 }
 
-//float UABCharacterStatComponent::GetHPRatio()
-//{
-//	ABCHECK(nullptr != CurrentStatData, 0.0f);
-//
-//	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
-//}
+float UABCharacterStatComponent::GetHPRatio()
+{
+	ABCHECK(nullptr != CurrentStatData, 0.0f);
+
+	return (CurrentStatData->MaxHP < KINDA_SMALL_NUMBER) ? 0.0f : (CurrentHP / CurrentStatData->MaxHP);
+}
