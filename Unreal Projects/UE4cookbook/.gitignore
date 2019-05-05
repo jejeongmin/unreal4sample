@@ -1,0 +1,13 @@
+﻿################################################################################
+# 이 .gitignore 파일은 Microsoft(R) Visual Studio에서 자동으로 만들어졌습니다.
+################################################################################
+
+/Chapter05
+/Chapter03
+/Chapter02
+/.vs
+/Chapter09/Saved
+/Chapter09/Intermediate
+/Chapter09/Binaries/Win64
+/Chapter09/.vs
+/Chapter11/content/StarterContent
