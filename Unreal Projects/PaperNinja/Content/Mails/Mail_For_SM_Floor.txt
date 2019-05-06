@@ -1,0 +1,8 @@
+바닥 SM_Floor를 위한 머티리얼을 2가지 만들었는데요.
+애셋이 체크 아웃 중이라서, 제 쪽에서는 적용이 불가능합니다.
+
+조금 귀찮으시겠지만
+SM_Floor의 단면 부분에 Material'/Game/Architecture/Materials/M_FloorSide.M_FloorSide'를 적용하고
+SM_Floor의 바닥 부분에 Material'/Game/Architecture/Materials/M_Floor.M_Floor'를 적용해주시면 감사하겠습니다.
+
+내일부터 일주일 동안 휴가를 가는데요. 중간에 문제가 있다면 xxxx@xxx.xx로 연락주세요.
