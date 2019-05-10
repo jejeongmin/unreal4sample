@@ -3,6 +3,15 @@
 StarterContent
 
 
+HowTo_PlayerCamera
+--------------------------------------------------------------------
+Pawn 에 Camera 가 Attach 된 SpringArm 을 붙여서 조작하는 예제.
+
+Input 을 통한 Pawn 이동, Camera Yaw, Pitch 회전, ZoomIn/Out 구현
+
+
+
+--------------------------------------------------------------------
 이번 섹션에서 배운 것(출처: https://wergia.tistory.com/130?category=807793 [베르의 프로그래밍 노트])
 
 1. USceneComponent

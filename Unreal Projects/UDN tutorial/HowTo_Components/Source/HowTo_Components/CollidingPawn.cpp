@@ -21,7 +21,7 @@ ACollidingPawn::ACollidingPawn()
 	USphereComponent* SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("RootComponent"));
 	RootComponent = SphereComponent;
 	SphereComponent->InitSphereRadius(40.0f);
-	SphereComponent->SetCollisionProfileName(TEXT("Pawn"));
+	SphereComponent->SetCollisionProfileName(TEXT("Vehicle"));
 
 	// 구체가 어딨는지 확인할 수 있도록 메시 컴포넌트 생성 및 위치 조정
 	// 다음, 반경이 50 인 스태틱 메시 애셋에서 눈에 보이는 구체를 만들어 붙여줍니다.
