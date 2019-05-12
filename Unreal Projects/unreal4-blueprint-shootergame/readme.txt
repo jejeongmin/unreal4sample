@@ -18,8 +18,6 @@ unreal 4 ver 2.21 기준으로 수정했다.
     Pawn 의 BeginPlay 가 먼저 구동되어, behavior tree 의 초기화가 진행되지 않았음
     Controller 에서 Pawn 의 로직이 구현되도록 수정
 
-
-
 3년 전에 작성한 책에 대한 요약
 -------------------------------------
 
@@ -102,3 +100,84 @@ PawnSensing 컴포넌트를 이용해 적에게 보는 능력 뿐 아니라 소리를 듣는 능력도 부여
 https://docs.unrealengine.com/latest/INT/
 https://answers.unrealengine.com/
 https://forums.unrealengine.com/
+
+
+
+
+unreal4-blueprint-shootergame
+-------------------------------------
+## AmmoPickup
+- 장탄수 증가
+- 사운드 효과
+
+## CylinderTarget
+- 첫번째 타격에 색상 변경
+- 두번째 타격에 파괴
+- 게임 클리어 체크
+
+## FirstPersonHUD
+- 크로스헤어 그리기
+
+## FirstPersonProjectile
+- 피격객체가 피직스 시뮬레이션 적용을 받는 경우 임펄스 주기
+- 피직스 시뮬레이션 적용을 받지 않는다면 Damage 주기
+
+## FirstPersonCharacter
+
+- 캐릭터 이동 구현
+- 캐릭터 시점 회전 구현
+- 총 발사 구현
+- 점프 구현
+- 스프린트 구현
+- 저격 줌 인/아웃 구현
+- 플레이어 피격 구현
+- 시간에 따른 플레이어 HP 회복 구현
+- save system 구현
+- escape 버튼 구현
+- 라운드 결과 처리 구현(종료/진행)
+
+## FirstPerson_AnimBlueprint
+
+- Idle, Run, Jump 애님 그래프 구현
+
+
+## Target, MovingTarget
+
+- 피격시, 빨간 색으로 머터리얼 교체 구현
+
+## HUD
+
+- 남은 탄환, HP 등 UI 출력에 필요한 정보를 반환하는 함수 구현
+
+## LoseMenu
+
+- 게임 재시작, 종료 구현
+
+
+## PauseMenu
+
+- 게임 재개, 초기화 구현
+
+## RoundTransition
+
+- 다음 라운드 시작 구현
+
+## FirstPersonExampleMap
+
+- 주기적으로 적 캐릭터 스폰 로직 구현
+
+## EnemyCharacter
+
+- 현재 Patrol 포인트를 결정
+- 피격 처리, 게임 결과 처리
+
+## EnemyController
+
+- Behavior tree 초기화
+- BlackBoard 의 변수들을 연산
+
+## EnemyBehavior
+
+- Can See -> Attack -> MoveTo -> Damage Player
+- Heard Sound -> Investigate Sound -> MoveTo
+- Wander -> Get Next Wander Point -> MoveTo
