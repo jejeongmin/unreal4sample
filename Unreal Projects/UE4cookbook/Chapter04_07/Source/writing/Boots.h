@@ -24,7 +24,7 @@ class WRITING_API ABoots : public AActor, public IWearable
 		/*
 			Boots 클래스는 IWearable 을 구현하지만, 기본 기능을 재정의하지는 않는다.
 			그러나 _Implementation 함수들은 가상함수로 정의되기 때문에 명시적으로
-			인터페이스를 구현할 필요가 있고 기본 구현ㅇ르 직접적으로 호출해줘야 한다.
+			인터페이스를 구현할 필요가 있고 기본 구현으로 직접적으로 호출해줘야 한다.
 
 			대조적으로 Gloves 는 IWearable 을 구현하지만 블루프린트 안에서 OnEquip 의 구현을 재정의한다.
 		*/

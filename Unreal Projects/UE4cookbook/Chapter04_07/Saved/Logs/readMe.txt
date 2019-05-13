@@ -1,1 +1,0 @@
-'generating visual studio solution file' needs Saved/Logs folder
