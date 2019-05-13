@@ -32,6 +32,8 @@ public:
 
 	FReply OnButtonClicked();
 
+	PROPERTY_BINDING_IMPLEMENTATION(FString, Label);
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Label;
 

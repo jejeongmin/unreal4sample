@@ -15,7 +15,7 @@ class CHAPTER9_API SCustomButton : public SCompoundWidget
 		: _Label(TEXT("Default Value"))
 		, _ButtonClicked()
 	{}
-		SLATE_ATTRIBUTE(FString, Label)SCompoundWidget
+		SLATE_ATTRIBUTE(FString, Label)
 		SLATE_EVENT(FOnClicked, ButtonClicked)
 	SLATE_END_ARGS()
 		

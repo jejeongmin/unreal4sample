@@ -28,7 +28,7 @@ FReply UCustomButtonWidget::OnButtonClicked()
 void UCustomButtonWidget::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
-	TAttribute<FString> LabelBinding = OPTIONAL_BINDING(FString, Label);
+	TAttribute<FString> LabelBinding = PROPERTY_BINDING(FString, Label);
 	MyButton->Label = LabelBinding;
 	
 	
