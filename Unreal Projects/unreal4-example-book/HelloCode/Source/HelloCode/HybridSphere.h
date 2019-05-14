@@ -24,14 +24,12 @@ public:
 	// 오버랩 수행
 	UFUNCTION(BlueprintNativeEvent)
 	void MyOnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
-
-	void MyOnBeginOverlap_Implementation(AActor* OverlappedActor, AActor* OtherActor);
+	virtual void MyOnBeginOverlap_Implementation(AActor* OverlappedActor, AActor* OtherActor);
 
 	// 오버랩 종료 수행
 	UFUNCTION(BlueprintNativeEvent)
 	void MyOnEndOverlap(AActor* OverlappedActor, AActor* OtherActor);
-
-	void MyOnEndOverlap_Implementation(AActor* OverlappedActor, AActor* OtherActor);
+	virtual void MyOnEndOverlap_Implementation(AActor* OverlappedActor, AActor* OtherActor);
 
 protected:
 	UPROPERTY(Category = "Components", EditAnywhere)
