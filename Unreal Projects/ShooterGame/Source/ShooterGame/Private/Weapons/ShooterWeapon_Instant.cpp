@@ -290,6 +290,12 @@ void AShooterWeapon_Instant::SpawnImpactEffects(const FHitResult& Impact)
 	}
 }
 
+/*
+	jeongminje	2019-05-16
+
+	Instance shot 발사 시, 총기 궤적(Trail) 이펙트 출력한다.
+	Effect Asset 은 blueprint class WeapGun 에서 P_AssaultRifle_Trail 로 지정되어 있다.
+*/
 void AShooterWeapon_Instant::SpawnTrailEffect(const FVector& EndPoint)
 {
 	if (TrailFX)

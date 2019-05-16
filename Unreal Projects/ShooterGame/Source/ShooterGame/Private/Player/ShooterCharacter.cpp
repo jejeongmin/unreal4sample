@@ -841,6 +841,13 @@ void AShooterCharacter::StopAllAnimMontages()
 
 //////////////////////////////////////////////////////////////////////////
 // Input
+/*
+	jejeongmin	2019-05-16
+
+	플레이어 카메라의 yaw / pitch 회전을 두 가지 방식으로 처리하는 걸 보여준다.
+	APawn::AddControllerYawInput 을 호출해 기본적인 회전 처리를 해주기도 하고
+	AShooterCharacter::TurnAtRate 를 보면, 회전속도 등 추가적인 요소를 덧붙여 처리하기도 한다.
+*/
 
 void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -872,10 +879,16 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &AShooterCharacter::OnStopRunning);
 }
 
+/*
+	jejeongmin : 2019-05-16
 
+	폰 바라보는 방향 기준으로 전후방 이동 처리
+	Rotation 으로부터 X 방향 벡터 추출
+*/
 void AShooterCharacter::MoveForward(float Val)
 {
-	if (Controller && Val != 0.f)
+	
+	if (Controller && false == FMath::IsNearlyZero(Val, 0.00001f))
 	{
 		// Limit pitch when walking or falling
 		const bool bLimitRotation = (GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling());
@@ -885,9 +898,15 @@ void AShooterCharacter::MoveForward(float Val)
 	}
 }
 
+/*
+	jejeongmin : 2019-05-16
+
+	폰 바라보는 방향 기준으로 좌우 이동 처리
+	Quaternion 으로부터 Y 방향 벡터 추출
+*/
 void AShooterCharacter::MoveRight(float Val)
 {
-	if (Val != 0.f)
+	if (Controller && false == FMath::IsNearlyZero(Val, 0.00001f))
 	{
 		const FQuat Rotation = GetActorQuat();
 		const FVector Direction = FQuatRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
@@ -897,7 +916,7 @@ void AShooterCharacter::MoveRight(float Val)
 
 void AShooterCharacter::MoveUp(float Val)
 {
-	if (Val != 0.f)
+	if (Controller && false == FMath::IsNearlyZero(Val, 0.00001f))
 	{
 		// Not when walking or falling.
 		if (GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
@@ -921,6 +940,12 @@ void AShooterCharacter::LookUpAtRate(float Val)
 	AddControllerPitchInput(Val * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+/*
+	2019-05-16	jejeongmin
+
+	대시를 멈추고 weapon 의 startfire 호출
+	클라이언트 모드인 경우 server start fire 호출
+*/
 void AShooterCharacter::OnStartFire()
 {
 	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
@@ -939,6 +964,12 @@ void AShooterCharacter::OnStopFire()
 	StopWeaponFire();
 }
 
+/*
+	jejeongmin	2019-05-16
+
+	저격 줌인/아웃 기능 구현
+	ShooterPlayerCamera 에서 설정된 두 FOV 사이를 보간하면서 교체하는 방식으로 구현
+*/
 void AShooterCharacter::OnStartTargeting()
 {
 	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
@@ -957,6 +988,12 @@ void AShooterCharacter::OnStopTargeting()
 	SetTargeting(false);
 }
 
+/*
+	jejeongmin	2019-05-16
+
+	current weapon OnUnEquip -> current pawn as weapon owner -> attach weapon mesh -> weapon equip anim 재생
+	-> equip finish 타이머 설정 ( 탄알이 없으면 재장전 로직 시작 ) -> weapon equip play sound -> replication
+*/
 void AShooterCharacter::OnNextWeapon()
 {
 	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
@@ -985,6 +1022,11 @@ void AShooterCharacter::OnPrevWeapon()
 	}
 }
 
+/*
+	jejeongmin	2019-05-16
+
+	server realod -> reload anim 재생 -> 타이머 생성(탄환보충, stop reload anim 재생) -> reload 사운드 재생
+*/
 void AShooterCharacter::OnReload()
 {
 	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
@@ -997,6 +1039,12 @@ void AShooterCharacter::OnReload()
 	}
 }
 
+/*
+	jejeongmin	2019-05-16
+
+	대시를 하게 되면 사격을 멈추고 달려간다.
+	클라이언트 모드인 경우 server 의 상태도 running 으로 변경한다.
+*/
 void AShooterCharacter::OnStartRunning()
 {
 	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
@@ -1123,6 +1171,11 @@ void AShooterCharacter::BeginDestroy()
 	}
 }
 
+/*
+	jejeongmin : 2019-05-16
+
+	게임 입력 모드(UI 입력모드가 아님)인지 확인하고, 	Character::bPressedJump flag 를 변경해서 점프 발동
+*/
 void AShooterCharacter::OnStartJump()
 {
 	AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
