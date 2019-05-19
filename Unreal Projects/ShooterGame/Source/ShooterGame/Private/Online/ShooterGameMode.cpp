@@ -11,7 +11,11 @@
 #include "Bots/ShooterAIController.h"
 #include "ShooterTeamStart.h"
 
+/*
+	jejeongmin	2019-05-19
 
+	GameInfo 에서 관리해야 할 객체들의 메타 정보(클래스 정보)를 여기서 모두 세팅한다.
+*/
 AShooterGameMode::AShooterGameMode(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnOb(TEXT("/Game/Blueprints/Pawns/PlayerPawn"));
@@ -71,6 +75,16 @@ void AShooterGameMode::PreInitializeComponents()
 	GetWorldTimerManager().SetTimer(TimerHandle_DefaultTimer, this, &AShooterGameMode::DefaultTimer, GetWorldSettings()->GetEffectiveTimeDilation(), true);
 }
 
+/*
+	jejeongmin	2019-05-19
+
+	UE4 의 GameInfo 에서는 state 개념이 없어진건가? MatchState 에 따라서 직접 상태를 구현하나?
+	아래 코드를 보면 MatchState 의 각 enum 들은 각각 다음의 UE3 의 gameinfo state 와 매칭된다.
+
+	WaitingPostMatch -> PreMatchGameEnd
+	InProgress	-> GameInProgress
+	WaitingToStart -> PendingMatchGame or PreMatch
+*/
 void AShooterGameMode::DefaultTimer()
 {
 	// don't update timers for Play In Editor mode, it's not real match
@@ -121,6 +135,12 @@ void AShooterGameMode::DefaultTimer()
 	}
 }
 
+/*
+	jejeongmin	2019-05-19
+
+	지정된 개수만큼 봇을 생성해준다.
+	게임 시작 전에 warming up time 을 추가로 부여할 수 있다.
+*/
 void AShooterGameMode::HandleMatchIsWaitingToStart()
 {
 	Super::HandleMatchIsWaitingToStart();

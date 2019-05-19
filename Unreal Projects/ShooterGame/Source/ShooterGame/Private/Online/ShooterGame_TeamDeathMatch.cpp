@@ -33,6 +33,11 @@ void AShooterGame_TeamDeathMatch::InitGameState()
 	}
 }
 
+/*
+	jejeongmin	2019-05-19
+
+	TDM 이기 때문에 같은 팀이 주는 대미지는 안받지만, 스스로에게 가한 데미지(폭딜/스플래시 대미지)는 받는다.
+*/
 bool AShooterGame_TeamDeathMatch::CanDealDamage(AShooterPlayerState* DamageInstigator, class AShooterPlayerState* DamagedPlayer) const
 {
 	return DamageInstigator && DamagedPlayer && (DamagedPlayer == DamageInstigator || DamagedPlayer->GetTeamNum() != DamageInstigator->GetTeamNum());
@@ -108,6 +113,11 @@ bool AShooterGame_TeamDeathMatch::IsWinner(AShooterPlayerState* PlayerState) con
 	return PlayerState && !PlayerState->IsQuitter() && PlayerState->GetTeamNum() == WinnerTeam;
 }
 
+/*
+	jejeongmin	2019-05-19
+	
+	SpawnPoint 에 team 정보가 있으므로, 해당 point 에서는 같은 팀의 pawn 만 스폰할 수 있다.
+*/
 bool AShooterGame_TeamDeathMatch::IsSpawnpointAllowed(APlayerStart* SpawnPoint, AController* Player) const
 {
 	if (Player)
@@ -124,6 +134,11 @@ bool AShooterGame_TeamDeathMatch::IsSpawnpointAllowed(APlayerStart* SpawnPoint, 
 	return Super::IsSpawnpointAllowed(SpawnPoint, Player);
 }
 
+/*
+	jejeongmin	2019-05-19
+
+	AI pawn 도 초기화할 때 어느 팀인지 정해준다.
+*/
 void AShooterGame_TeamDeathMatch::InitBot(AShooterAIController* AIC, int32 BotNum)
 {	
 	AShooterPlayerState* BotPlayerState = CastChecked<AShooterPlayerState>(AIC->PlayerState);

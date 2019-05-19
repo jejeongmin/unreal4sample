@@ -941,7 +941,7 @@ void AShooterCharacter::LookUpAtRate(float Val)
 }
 
 /*
-	2019-05-16	jejeongmin
+	jejeongmin : 2019-05-16	
 
 	대시를 멈추고 weapon 의 startfire 호출
 	클라이언트 모드인 경우 server start fire 호출
@@ -965,7 +965,7 @@ void AShooterCharacter::OnStopFire()
 }
 
 /*
-	jejeongmin	2019-05-16
+	jejeongmin : 2019-05-16
 
 	저격 줌인/아웃 기능 구현
 	ShooterPlayerCamera 에서 설정된 두 FOV 사이를 보간하면서 교체하는 방식으로 구현

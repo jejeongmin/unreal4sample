@@ -134,6 +134,11 @@ protected:
 public:	
 
 	/** finish current match and lock players */
+	/*
+		jejeongmin	2019-05-19
+
+		UPROPERTY 에 exec 키워드를 주면 콘솔 커맨드릿 명령으로 변경
+	*/
 	UFUNCTION(exec)
 	void FinishMatch();
 
