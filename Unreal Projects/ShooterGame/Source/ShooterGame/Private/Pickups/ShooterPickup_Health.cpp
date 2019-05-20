@@ -19,6 +19,12 @@ void AShooterPickup_Health::GivePickupTo(class AShooterCharacter* Pawn)
 	{
 		Pawn->Health = FMath::Min(FMath::TruncToInt(Pawn->Health) + Health, Pawn->GetMaxHealth());
 
+		/*
+			jejeongmin	2019-05-20
+
+			pickup event 에 대해 online 서비스로 로그를 남긴다.
+			이 데모 프로젝트에서는 onlince 서비스 구현이 되어 있지 않기 때문에 동작하지 않는다.
+		*/
 		// Fire event for collected health
 		const auto Events = Online::GetEventsInterface();
 		const auto Identity = Online::GetIdentityInterface();

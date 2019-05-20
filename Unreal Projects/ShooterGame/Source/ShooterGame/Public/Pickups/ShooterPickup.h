@@ -4,6 +4,15 @@
 
 #include "ShooterPickup.generated.h"
 
+/*
+	jejeongmin	2019-05-20
+
+	레벨상에 pickup 을 배치하기 위한 blueprint 클래스들의 부모 클래스가 된다.
+	NotifyActorBeginOverlap 를 이용해 touch 를 감지하지만,
+	하위 클래스들이 GivePickupTo 를 상속해 처리할 수 있도록 설계되었다.
+
+	pick 처리 설계를 위한 좋은 예제임.
+*/
 // Base class for pickup objects that can be placed in the world
 UCLASS(abstract)
 class AShooterPickup : public AActor

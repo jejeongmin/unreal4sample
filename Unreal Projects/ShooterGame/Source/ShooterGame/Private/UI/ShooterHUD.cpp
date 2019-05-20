@@ -33,6 +33,11 @@ AShooterHUD::AShooterHUD(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	static ConstructorHelpers::FObjectFinder<UTexture2D> HUDAssets02TextureOb(TEXT("/Game/UI/HUD/HUDAssets02"));
 	static ConstructorHelpers::FObjectFinder<UTexture2D> LowHealthOverlayTextureOb(TEXT("/Game/UI/HUD/LowHealthOverlay"));
 
+	/*
+		jejeongmin	2019-05-20
+
+		Dedicated Server 로직은 아래와 같은 방법으로 구분한다.
+	*/
 	// Fonts are not included in dedicated server builds.
 	#if !UE_SERVER
 	{
@@ -652,6 +657,11 @@ void AShooterHUD::DrawDebugInfoString(const FString& Text, float PosX, float Pos
 #endif
 }
 
+/*
+	jejeongmin	2019-05-20
+
+	crosshair 를 상태에 따라 서로 다른 텍스쳐를 이용해 화면 중앙에 그린다.
+*/
 void AShooterHUD::DrawCrosshair()
 {
 	AShooterPlayerController* PCOwner = Cast<AShooterPlayerController>(PlayerOwner);
@@ -950,6 +960,11 @@ void AShooterHUD::OnPlayerTalkingStateChanged(TSharedRef<const FUniqueNetId> Tal
 	}
 }
 
+/*
+	jejeongmin	2019-05-20
+
+	VOIP service 연동된 경우, voip 상태(talking/mute..) 를 UI 에 표시할 수 있도록, 관련 callback 을 등록한다.
+*/
 void AShooterHUD::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -980,6 +995,11 @@ void AShooterHUD::ToggleScoreboard()
 	ShowScoreboard(!bIsScoreBoardVisible);
 }
 
+/*
+	jejeongmin	2019-05-20
+
+	UI Framework 활용 및 분석 entry point
+*/
 bool AShooterHUD::ShowScoreboard(bool bEnable, bool bFocus)
 {
 	if( bIsScoreBoardVisible == bEnable)

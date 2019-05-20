@@ -25,6 +25,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category=Pickup)
 	int32 AmmoClips;
 
+	/*
+		jejeongmin	2019-05-20
+
+		어떤 무기에 대한 탄환인지 weapon class 를 지정할 수 있게 한다.
+	*/
 	/** which weapon gets ammo? */
 	UPROPERTY(EditDefaultsOnly, Category=Pickup)
 	TSubclassOf<AShooterWeapon> WeaponType;
