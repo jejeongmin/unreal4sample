@@ -1,0 +1,13 @@
+1. EnhancedInput 을 이용한 사용자 입력 처리 구현
+
+2. Top view 처리
+	tps project 를 top view 로 변경
+
+3. EnemyCharacter class 구현
+	1) scenecomponent 를 이용한 눈높이 위치에서 시야 검색
+	2) trace line 그리기
+	3) 플레이어를 발견할 경우 플레이어를 향해 캐릭터 yaw 회전
+	4) 제고오디는 visibility 채널 대신, 커스텀 EnemySight trace channel 만들어보기
+
+4. left shift 입력을 통한 걷기 동작 만들기
+	졸리다.. 내일 만들자..
