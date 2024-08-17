@@ -14,7 +14,7 @@ class DODGEBALL_API AEnemyCharacter : public ACharacter
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LookAt, meta = (AllowPrivateAccess = "true"))
-	class USceneComponent* SightSource;
+	class ULookAtActorComponent* LookAtActorComponent;
 
 public:
 
@@ -28,12 +28,6 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	// Change the rotation of the character to face the given actor
-	bool LookAtActor(AActor* TargetActor);
-
-	// Can we see the given actor
-	bool CanSeeActor(AActor* TargetActor);
 
 	void ThrowDodgeball();
 
