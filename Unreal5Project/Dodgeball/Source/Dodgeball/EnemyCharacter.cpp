@@ -6,6 +6,9 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
+#include "DodgeballProjectile.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -40,12 +43,34 @@ void AEnemyCharacter::Tick(float DeltaTime)
 	ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
 
 	// Look at the player character every frame
-	LookAtActor(PlayerCharacter);
+	bCanSeePlayer = LookAtActor(PlayerCharacter);
+
+	if (bCanSeePlayer != bPreviousCanSeePlayer)
+	{
+		if (bCanSeePlayer)
+		{
+			//Start throwing dodgeballs
+			GetWorldTimerManager().SetTimer(ThrowTimerHandle,
+				this,
+				&AEnemyCharacter::ThrowDodgeball,
+				ThrowingInterval,
+				true,
+				ThrowingDelay);
+		}
+		else
+		{
+			//Stop throwing dodgeballs
+			GetWorldTimerManager().ClearTimer(ThrowTimerHandle);
+		}
+	}
+
+	bPreviousCanSeePlayer = bCanSeePlayer;
 }
 
-void AEnemyCharacter::LookAtActor(AActor* TargetActor)
+bool AEnemyCharacter::LookAtActor(AActor* TargetActor)
 {
-	if (TargetActor == nullptr) return;
+	if (TargetActor == nullptr)
+		return false;
 
 	if (CanSeeActor(TargetActor))
 	{
@@ -56,7 +81,11 @@ void AEnemyCharacter::LookAtActor(AActor* TargetActor)
 
 		//Set the enemy's rotation to that rotation
 		SetActorRotation(LookAtRotation);
+
+		return true;
 	}
+
+	return false;
 }
 
 bool AEnemyCharacter::CanSeeActor(AActor* TargetActor)
@@ -88,4 +117,23 @@ bool AEnemyCharacter::CanSeeActor(AActor* TargetActor)
 	DrawDebugLine(GetWorld(), Start, End, FColor::Red);
 
 	return !Hit.bBlockingHit;
+}
+
+void AEnemyCharacter::ThrowDodgeball()
+{
+	if (DodgeballClass == nullptr)
+	{
+		return;
+	}
+
+	FVector ForwardVector = GetActorForwardVector();
+	float SpawnDistance = 40.f;
+	FVector SpawnLocation = GetActorLocation() + (ForwardVector * SpawnDistance);
+	FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
+
+	//Spawn new dodgeball
+	ADodgeballProjectile* Projectile = GetWorld()->SpawnActorDeferred<ADodgeballProjectile>(DodgeballClass, SpawnTransform);
+
+	Projectile->GetProjectileMovementComponent()->InitialSpeed = 2200.f;
+	Projectile->FinishSpawning(SpawnTransform);
 }
