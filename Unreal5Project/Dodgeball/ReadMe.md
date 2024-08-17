@@ -1,3 +1,5 @@
+## 작업한 것
+
 1. EnhancedInput 을 이용한 사용자 입력 처리 구현
 
 2. Top view 처리
@@ -9,5 +11,10 @@
 	3) 플레이어를 발견할 경우 플레이어를 향해 캐릭터 yaw 회전
 	4) 제고오디는 visibility 채널 대신, 커스텀 EnemySight trace channel 만들어보기
 
-4. left shift 입력을 통한 걷기 동작 만들기
-	졸리다.. 내일 만들자..
+4. left shift 입력을 통한 걷기 동작 추가
+	
+
+
+## 작업할 것
+
+1. 시야에 갑자기 나타날 경우 EnemyCharacter 가 Player 를 향해 한번에 회전하는 것 부자연스러움. 보간으로 회전하도록 변경

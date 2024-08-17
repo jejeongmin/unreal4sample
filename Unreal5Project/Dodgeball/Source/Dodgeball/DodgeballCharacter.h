@@ -36,6 +36,10 @@ class ADodgeballCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
 
+	/** Walk Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* WalkAction;
+
 public:
 	ADodgeballCharacter();
 	
@@ -44,6 +48,10 @@ protected:
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
+
+	void BeginWalking();
+
+	void StopWalking();
 
 protected:
 	// APawn interface

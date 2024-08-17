@@ -84,6 +84,10 @@ void ADodgeballCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ADodgeballCharacter::Move);
+
+		// Walking
+		EnhancedInputComponent->BindAction(WalkAction, ETriggerEvent::Started, this, &ADodgeballCharacter::BeginWalking);
+		EnhancedInputComponent->BindAction(WalkAction, ETriggerEvent::Completed, this, &ADodgeballCharacter::StopWalking);
 	}
 	else
 	{
@@ -112,4 +116,14 @@ void ADodgeballCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
+}
+
+void ADodgeballCharacter::BeginWalking()
+{
+	GetCharacterMovement()->MaxWalkSpeed *= 0.4f;
+}
+
+void ADodgeballCharacter::StopWalking()
+{
+	GetCharacterMovement()->MaxWalkSpeed /= 0.4f;
 }
