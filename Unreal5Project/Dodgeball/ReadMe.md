@@ -29,10 +29,15 @@
 
 7. DodgeballCharacter 구현
 	1. HealthComponent 구현으로 체력 구현 처리
-	1. HealthInterface 로 체력 소진 시 처리를 override 처리
+	2. HealthInterface 로 체력 소진 시 처리를 override 처리
+
+8. UMG 기반 UI 추가
+	1. 게임종료시 재시작 버튼 추가
 
 ## 작업할 것
 
 1. 시야에 갑자기 나타날 경우 EnemyCharacter 가 Player 를 향해 한번에 회전하는 것 부자연스러움. 보간으로 회전하도록 변경
 
 2. DodgeballCharacter 가 특정 장애물 뒤에 숨으면, CameraArm 이 땡겨지는 문제 수정, collision 설정으로 수정 가능
+
+3. 플레이어 캐릭터 체력 바 추가, 게임 종료시 빠져 나가기 버튼 추가

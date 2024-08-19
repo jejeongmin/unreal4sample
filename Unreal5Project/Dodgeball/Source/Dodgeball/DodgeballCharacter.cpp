@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "HealthComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "DodgeballPlayerController.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -70,7 +71,11 @@ void ADodgeballCharacter::BeginPlay()
 
 void ADodgeballCharacter::OnDeath_Implementation()
 {
-	UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, true);
+	ADodgeballPlayerController* PlayerController = Cast<ADodgeballPlayerController>(GetController());
+	if (PlayerController != nullptr)
+	{
+		PlayerController->ShowRestartWidget();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
