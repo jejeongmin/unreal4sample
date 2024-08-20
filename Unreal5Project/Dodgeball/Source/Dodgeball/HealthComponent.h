@@ -29,5 +29,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// Take health points from its owner
-	void LoseHealth(float Amount);		
+	void LoseHealth(float Amount);
+
+	FORCEINLINE float GetHealthPercent() const { return Health / 100.f; }
 };

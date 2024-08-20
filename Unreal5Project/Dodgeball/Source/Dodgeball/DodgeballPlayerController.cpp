@@ -3,6 +3,7 @@
 
 #include "DodgeballPlayerController.h"
 #include "RestartWidget.h"
+#include "HUDWidget.h"
 
 void ADodgeballPlayerController::ShowRestartWidget()
 {
@@ -23,4 +24,24 @@ void ADodgeballPlayerController::HideRestartWidget()
 	SetPause(false);
 	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = false;
+}
+
+
+void ADodgeballPlayerController::UpdateHealthPercent(float HealthPercent)
+{
+	if (HUDWidget != nullptr)
+	{
+		HUDWidget->UpdateHealthPercent(HealthPercent);
+	}
+}
+
+void ADodgeballPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (BP_HUDWidget != nullptr)
+	{
+		HUDWidget = CreateWidget<UHUDWidget>(this, BP_HUDWidget);
+		HUDWidget->AddToViewport();
+	}
 }

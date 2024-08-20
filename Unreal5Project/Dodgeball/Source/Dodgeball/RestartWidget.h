@@ -19,10 +19,16 @@ protected:
 	UFUNCTION()
 	void OnRestartClicked();
 
+	UFUNCTION()
+	void OnExitClicked();
+
 public:
 
 	virtual void NativeOnInitialized() override;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* RestartButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ExitButton;
 };
