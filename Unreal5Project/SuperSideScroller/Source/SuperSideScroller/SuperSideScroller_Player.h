@@ -39,7 +39,17 @@ protected:
 	//Throw projectile
 	void ThrowProjectile();
 
+public:
+
+	void SpawnProjectile();
+
 private:
 	//Bool to control if we are sprinting. Failsafe.
 	bool bIsSprinting;
+
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* ThrowMontage;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class APlayerProjectile> PlayerProjectile;
 };

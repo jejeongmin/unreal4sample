@@ -6,7 +6,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "Animation/AnimInstance.h"
+#include "PlayerProjectile.h" 
+#include "Engine/World.h" 
+#include "Components/SphereComponent.h" 
 
 ASuperSideScroller_Player::ASuperSideScroller_Player()
 {
@@ -60,5 +63,35 @@ void ASuperSideScroller_Player::StopSprinting()
 
 void ASuperSideScroller_Player::ThrowProjectile()
 {
-	UE_LOG(LogTemp, Warning, TEXT("THROW PROJECTILE"));
+	if (ThrowMontage)
+	{
+		const bool bIsMontagePlaying = GetMesh()->GetAnimInstance()->Montage_IsPlaying(ThrowMontage);
+		if (!bIsMontagePlaying)
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(ThrowMontage, 1.0f);
+		}
+	}
+}
+
+void ASuperSideScroller_Player::SpawnProjectile()
+{
+	if (PlayerProjectile)
+	{
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			const FVector SpawnLocation = this->GetMesh()->GetSocketLocation(FName("ProjectileSocket"));
+			const FRotator Rotation = GetActorForwardVector().Rotation();
+			APlayerProjectile* Projectile = World->SpawnActor<APlayerProjectile>(PlayerProjectile, SpawnLocation, Rotation, SpawnParams);
+			
+			
+			// projectile 을 발사하는 instigator 는 projectile 의 충돌판정 대상에서 제외
+			if (Projectile)
+			{
+				Projectile->CollisionComp->MoveIgnoreActors.Add(SpawnParams.Owner);
+			}
+		}
+	}
 }
