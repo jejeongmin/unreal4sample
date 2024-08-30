@@ -26,6 +26,18 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	class USphereComponent* CollisionComp;
 
+	UPROPERTY(VisibleDefaultsOnly, Category = Sound)
+	class UAudioComponent* ProjectileMovementSound;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	class UParticleSystemComponent* ProjectileEffect;
+
+	UPROPERTY(EditAnywhere, Category = Sound)
+	class USoundBase* DestroySound;
+
+	UPROPERTY(EditAnywhere, Category = Projectile)
+	class UParticleSystem* DestroyEffect;
+
 private:
 
 	//Projectile movement component 

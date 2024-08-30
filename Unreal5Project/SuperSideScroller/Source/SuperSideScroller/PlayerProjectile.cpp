@@ -6,6 +6,10 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "EnemyBase.h"
+#include "Components/AudioComponent.h" 
+#include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h" 
+#include "Engine/World.h" 
 
 // Sets default values
 APlayerProjectile::APlayerProjectile()
@@ -37,6 +41,12 @@ APlayerProjectile::APlayerProjectile()
 	}
 
 	InitialLifeSpan = 3.0f;
+
+	ProjectileMovementSound = CreateDefaultSubobject<UAudioComponent>(TEXT("ProjectileMovementSound"));
+	ProjectileMovementSound->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+
+	ProjectileEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ProjectileEffect"));
+	ProjectileEffect->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 }
 
 void APlayerProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -54,4 +64,16 @@ void APlayerProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 void APlayerProjectile::ExplodeProjectile()
 {
 	Destroy();
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		if (DestroyEffect)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(World, DestroyEffect, GetActorTransform());
+		}
+		if (DestroySound)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(World, DestroySound, GetActorLocation());
+		}
+	}
 }
