@@ -39,6 +39,8 @@ protected:
 	//Throw projectile
 	void ThrowProjectile();
 
+	void EndPowerup();
+
 public:
 
 	void SpawnProjectile();
@@ -47,6 +49,8 @@ public:
 	int32 GetCurrentNumberofCollectables() { return NumberofCollectables; };
 
 	void IncrementNumberofCollectables(int32  Value);
+
+	void IncreaseMovementPowerup();
 
 private:
 	//Bool to control if we are sprinting. Failsafe.
@@ -59,4 +63,8 @@ private:
 	TSubclassOf<class APlayerProjectile> PlayerProjectile;
 
 	int32 NumberofCollectables;
+
+	FTimerHandle PowerupHandle;
+
+	bool bHasPowerupActive;
 };
