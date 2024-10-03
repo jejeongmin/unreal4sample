@@ -1,5 +1,7 @@
 #pragma once
 
+// eumeration ¿¹½Ã
+
 UENUM()
 enum class EWeaponType : uint8
 {
@@ -16,11 +18,11 @@ enum class EWeaponFireMode : uint8
 	Automatic
 };
 
-UENUM()
+UENUM(BlueprintType)
 enum class EAmmoType : uint8
 {
-	PistolBullets,
-	MachineGunBullets,
-	Slugs,
+	PistolBullets UMETA(DisplayName = "Pistol Bullet"),
+	MachineGunBullets UMETA(DisplayName = "MachineGun Bullet"),
+	Slugs UMETA(DisplayName = "Slugs Bullets"),
 	MAX
 };
