@@ -4,5 +4,15 @@
 
 3. 16장 Role 상태 보여주기 추가
 
-4. 레벨 기분 구성 해보
+4. 레벨 기분 구성 해보기
+
+5. 분석할 것
+   변수 replication 
+   RPC
+   GameMode, PC, GameState, PlayerState 관계
+   GameMode 상태 머신
+
+6. State 상태 보여주기 기능 추가
+
+7. Role 상태 보여주기 기능 추가
 
