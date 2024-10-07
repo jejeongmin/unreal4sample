@@ -19,6 +19,9 @@ protected:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	int32 PickupsRemaining;
 
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	int32 GameStateTick = 0;
+
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -26,7 +29,10 @@ protected:
 
 public:
 
-	void RemovePickup() { PickupsRemaining--; }
+	void RemovePickup()	{ PickupsRemaining--; }
 
-	bool HasPickups() const { return PickupsRemaining > 0; }
+	bool HasPickups() const	{ return PickupsRemaining > 0; }
+
+	void IncreaseGameStateTick() { ++GameStateTick;	}
+	int32 GetGameStateTick() const { return GameStateTick; }
 };

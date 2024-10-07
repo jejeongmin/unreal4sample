@@ -12,6 +12,8 @@ void APickupsGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty >& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APickupsGameState, PickupsRemaining);
+
+	DOREPLIFETIME_CONDITION(APickupsGameState, GameStateTick, COND_OwnerOnly);
 }
 
 void APickupsGameState::BeginPlay()

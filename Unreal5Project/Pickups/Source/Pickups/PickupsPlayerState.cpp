@@ -9,4 +9,7 @@ void APickupsPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty >&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APickupsPlayerState, Pickups);
+
+	// Variable A doesn't have any additional replication condition 
+	DOREPLIFETIME(APickupsPlayerState, PlayerStateTick);
 }

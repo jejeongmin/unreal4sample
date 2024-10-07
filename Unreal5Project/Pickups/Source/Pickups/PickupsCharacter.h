@@ -44,6 +44,10 @@ class APickupsCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AnyRepAction;
+
 public:
 	APickupsCharacter();
 	
@@ -55,6 +59,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void ToggleTickable(const FInputActionValue& Value);
 			
 
 protected:
@@ -64,11 +70,16 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Pickups Character")
 	USoundBase* FallSound;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Pickups Character")
 	USoundBase* LandSound;
+
+	// player state 와 game state 의 tick 갱신 및 tick 정보 표시 여부
+	bool	Tickable = true;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void Landed(const FHitResult& Hit) override;

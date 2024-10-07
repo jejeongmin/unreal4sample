@@ -12,7 +12,6 @@
    GameMode, PC, GameState, PlayerState 관계
    GameMode 상태 머신
 
-6. State 상태 보여주기 기능 추가
+6. 8번 키 action key 이름 적절히 변경 ( show tick info )
 
-7. Role 상태 보여주기 기능 추가
-
+7. ticinfo 를 숨기면 왜 다른 캐릭터 하나는 안숨겨지나? 이거 버그 수정

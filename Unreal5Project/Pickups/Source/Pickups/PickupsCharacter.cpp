@@ -11,9 +11,11 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "PickupsPlayerState.h"
+#include "PickupsGameState.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -64,6 +66,30 @@ void APickupsCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+void APickupsCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	APickupsPlayerState* MyPlayerState = GetPlayerState<APickupsPlayerState>();
+	APickupsGameState* GameState = Cast<APickupsGameState>(GetWorld()->GetGameState());
+
+	if (MyPlayerState != nullptr && GameState != nullptr)
+	{
+		//  Make sure that we add 1 to A and B only when it's authority, which in this case is the server, because the pawn was spawned in the server. This logic won't run on the clients. 
+		if (HasAuthority())
+		{
+			MyPlayerState->IncreasePlayerStateTick();
+			GameState->IncreaseGameStateTick();
+		}
+
+		if (Tickable)
+		{
+			const FString Values = FString::Printf(TEXT("MyPlayerStateTick = %d, GameStateTick = %d"), MyPlayerState->GetPlayerStateTick(), GameState->GetGameStateTick());
+			DrawDebugString(GetWorld(), GetActorLocation(), Values, nullptr, FColor::White, 0.0f, true);
+		}		
+	}	
+}
+
 void APickupsCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
@@ -100,11 +126,19 @@ void APickupsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APickupsCharacter::Look);
+
+		// Replication Action
+		EnhancedInputComponent->BindAction(AnyRepAction, ETriggerEvent::Triggered, this, &APickupsCharacter::ToggleTickable);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void APickupsCharacter::ToggleTickable(const FInputActionValue& Value)
+{
+	Tickable = !Tickable;
 }
 
 void APickupsCharacter::Move(const FInputActionValue& Value)
