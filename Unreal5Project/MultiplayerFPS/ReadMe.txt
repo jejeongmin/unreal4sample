@@ -1,9 +1,14 @@
-1. ºĞ¼®ÇÒ °Í
+1. ë¶„ì„í•  ê²ƒ
     RPC
-    ¼øÈ¯¹è¿­ ÀÎµ¦½Ì
+    ìˆœí™˜ë°°ì—´ ì¸ë±ì‹±
 
-2. 18Àå ³»¿ë Ãß°¡
+2. 18ì¥ ë‚´ìš© ì¶”ê°€
 
-3. DOREPLIFETIME_CONDITION »ç¿ë ¿¹Á¦ Ãß°¡
-    Ä³¸¯ÅÍ »ç¸ÁÇÏ¸é ´õ ÀÌ»ó replication ¾ÈÇÑ´Ù´ø°¡.
-    ÀÏÁ¤ ÀÌ»ó °Å¸®°¡ ¸Ö¾îÁö¸é ´õ ÀÌ»ó replication ¾ÈÇÑ´Ù´ø°¡.
+3. DOREPLIFETIME_CONDITION ì‚¬ìš© ì˜ˆì œ ì¶”ê°€
+    ìºë¦­í„° ì‚¬ë§í•˜ë©´ ë” ì´ìƒ replication ì•ˆí•œë‹¤ë˜ê°€.
+    ì¼ì • ì´ìƒ ê±°ë¦¬ê°€ ë©€ì–´ì§€ë©´ ë” ì´ìƒ replication ì•ˆí•œë‹¤ë˜ê°€.
+
+4. íŒ¨í‚¤ì§• í›„ ë³„ë„ PC ì—ì„œ ê°ì ì‹¤í–‰í•´ì„œ í…ŒìŠ¤íŠ¸ í•´ë³´ê¸°
+D:\projects\unreal_sample\Unreal5Project\TestMultiplayer_Package\Windows\TestMultiplayer.exe ThirdPersonMap?Listen -server -windowed -ResX=640 -ResY=480
+
+D:\projects\unreal_sample\Unreal5Project\TestMultiplayer_Package\Windows\TestMultiplayer.exe 127.0.0.1 -windowed -ResX=640 -ResY=480
