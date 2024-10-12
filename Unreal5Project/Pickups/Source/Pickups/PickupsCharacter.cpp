@@ -16,6 +16,7 @@
 #include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "Pickups.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -87,7 +88,18 @@ void APickupsCharacter::Tick(float DeltaTime)
 			const FString Values = FString::Printf(TEXT("MyPlayerStateTick = %d, GameStateTick = %d"), MyPlayerState->GetPlayerStateTick(), GameState->GetGameStateTick());
 			DrawDebugString(GetWorld(), GetActorLocation(), Values, nullptr, FColor::White, 0.0f, true);
 		}		
-	}	
+	}
+
+	// Convert the local role, remote role, owner and connection into a printable string format
+	const FString LocalRoleString = ROLE_TO_STRING(GetLocalRole());
+	const FString RemoteRoleString = ROLE_TO_STRING(GetRemoteRole());
+	const FString OwnerString = GetOwner() != nullptr ? GetOwner()->GetName() : TEXT("No Owner");
+	const FString ConnectionString = GetNetConnection() != nullptr ? TEXT("Valid Connection") : TEXT("Invalid Connection");
+
+	// Print the values so we can compare the values between the clients 
+	const FString Values = FString::Printf(TEXT("LocalRole = %s\nRemoteRole = %s\nOwner = %s\nConnection = %s"), *LocalRoleString, *RemoteRoleString, *OwnerString, *ConnectionString);
+
+	DrawDebugString(GetWorld(), GetActorLocation(), Values, nullptr, FColor::White, 0.0f, true);
 }
 
 void APickupsCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)

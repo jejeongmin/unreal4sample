@@ -15,3 +15,5 @@
 6. 8번 키 action key 이름 적절히 변경 ( show tick info )
 
 7. ticinfo 를 숨기면 왜 다른 캐릭터 하나는 안숨겨지나? 이거 버그 수정
+
+8. owerrole 정보 표시 단축키 추가
