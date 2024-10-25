@@ -21,7 +21,7 @@ ABullet::ABullet()
 	boxComp->SetWorldScale3D(FVector(0.75f, 0.25f, 1.0f));
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
-	meshComp->SetupAttachment(boxComp);
+	meshComp->SetupAttachment(boxComp);	// <- Actor 에서 컴포넌트의 부모를 설정한다. 에디터에서는 액터에 컴포넌트가 계층적으로 보이는 바로 그 부분을 말한다.
 
 	// 박스 컴포넌트의 콜리전 프리셋을 Bullet으로 설정한다.
 	boxComp->SetCollisionProfileName(TEXT("Bullet"));

@@ -8,6 +8,8 @@ public class ShootingCPP : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
+		// 참조할 dll 모듈을 여기서 지정한다.
+		// UMG 기능을 blue print 가 아닌, c++ 에서 사용하려면 UMG module 을 로드해야 한다.
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

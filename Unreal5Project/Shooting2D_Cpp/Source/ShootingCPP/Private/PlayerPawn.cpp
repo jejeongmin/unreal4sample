@@ -34,6 +34,13 @@ APlayerPawn::APlayerPawn()
 	firePosition = CreateDefaultSubobject<UArrowComponent>(TEXT("Fire Position"));
 	firePosition->SetupAttachment(boxComp);
 
+	/*
+		Collision 채널을 직접 생성자에서 처리한다.
+		이 작업 이 전에 에디터에서 생성된, 이 클래스를 상속 받은 BP 가 있는 경우에는
+		해당 BP class instance 에선느 설정이 반영되지 않는다. 이때는 그 BP class 자체를 지웠다가 다시 생성해야 한다.
+		이런 수고를 덜하려면, 처음부터 컬리전 설정을 잘 해놓은 상태에서 BP class 를 생성하던가.
+		Collision Preset 을 이용하는 다른 방법으로 collision 관리를 한다.
+	*/ 
 	// 오버랩 이벤트를 켠다.
 	boxComp->SetGenerateOverlapEvents(true);
 
@@ -89,6 +96,7 @@ void APlayerPawn::Tick(float DeltaTime)
 	FVector newLocation = GetActorLocation() + dir * moveSpeed * DeltaTime;
 
 	// 4. 현재 액터의 위치 좌표를 앞에서 구한 새 좌표로 갱신한다.
+	// 두번 째 sweep 인자를 true 로 설정하면 이동하면서 충돌 체크를 수행한다.
 	SetActorLocation(newLocation, true);
 
 }

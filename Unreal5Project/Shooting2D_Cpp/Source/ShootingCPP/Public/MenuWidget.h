@@ -18,6 +18,7 @@ public:
     UPROPERTY(EditAnywhere, meta = (BindWidget))
     class UButton* button_Restart;
 
+    // meta 정보의 BindWidget 의 경우 c++ 에서 만든 변수를 실제 위젯 블루프린트와 연동하는 역할을 한다.
     UPROPERTY(EditAnywhere, meta = (BindWidget))
     class UButton* button_Quit;
 

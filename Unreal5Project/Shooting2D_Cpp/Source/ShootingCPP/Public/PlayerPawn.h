@@ -55,7 +55,7 @@ public:
 
 	// 총알 블루프린트
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ABullet> bulletFactory;
+	TSubclassOf<class ABullet> bulletFactory;	// 월드에 배치되지 않은 원본 파일을 변수에 할당하라면 TSubclass<T> 라는 특수한 자료형을 사용한다.
 
 	// 총알 발사 효과음 파일
 	UPROPERTY(EditAnywhere)
