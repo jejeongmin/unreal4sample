@@ -2,7 +2,7 @@
 #include "GameSession.h"
 #include "GameSessionManager.h"
 #include "ServerPacketHandler.h"
-//#include "Room.h"
+#include "Room.h"
 
 void GameSession::OnConnected()
 {
@@ -11,6 +11,8 @@ void GameSession::OnConnected()
 
 void GameSession::OnDisconnected()
 {
+	GRoom->HandleLeavePlayer(player);
+
 	GSessionManager.Remove(static_pointer_cast<GameSession>(shared_from_this()));
 }
 
