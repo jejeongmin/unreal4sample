@@ -50,3 +50,11 @@ GetActorForwardVector();
 
 GetActorRightVector();
 액터의 Right 방향으로 구하는 함수
+
+-----------------------------------------------------------------------------------------------------
+UE 4.19 -> 5.5
+
+주요 변경 사항
+
+Build.cs 파일 업데이트
+이건 Project Setting 에 기존 PlayerInput Action Mapping 정보가 이미 설정되어 있어서 일부러 EnhancedInput 시스템으로 변경하지 않았음

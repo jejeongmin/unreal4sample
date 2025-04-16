@@ -9,6 +9,9 @@ public class HowTo_PlayerCamera2Target : TargetRules
 	{
 		Type = TargetType.Game;
 
-		ExtraModuleNames.AddRange( new string[] { "HowTo_PlayerCamera2" } );
+        DefaultBuildSettings = BuildSettingsVersion.V5;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
+
+        ExtraModuleNames.AddRange( new string[] { "HowTo_PlayerCamera2" } );
 	}
 }

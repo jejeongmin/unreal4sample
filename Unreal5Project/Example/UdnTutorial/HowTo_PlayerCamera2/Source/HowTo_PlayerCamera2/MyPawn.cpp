@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MyPawn.h"
-#include "./Engine/Classes/Camera/CameraComponent.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 AMyPawn::AMyPawn()

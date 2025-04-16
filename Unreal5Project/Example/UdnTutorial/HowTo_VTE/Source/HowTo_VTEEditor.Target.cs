@@ -9,6 +9,9 @@ public class HowTo_VTEEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "HowTo_VTE" } );
+        DefaultBuildSettings = BuildSettingsVersion.V5;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
+
+        ExtraModuleNames.AddRange( new string[] { "HowTo_VTE" } );
 	}
 }

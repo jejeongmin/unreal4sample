@@ -43,7 +43,7 @@ void ACountdown::Tick(float DeltaTime)
 
 void ACountdown::UpdateTimerDisplay()
 {
-	CountdownText->SetText(FString::FromInt(FMath::Max(CountdownTime, 0)));
+	CountdownText->SetText(FText::AsNumber(FMath::Max(CountdownTime, 0)));
 }
 
 void ACountdown::AdvanceTimer()
@@ -61,5 +61,5 @@ void ACountdown::AdvanceTimer()
 void ACountdown::CountdownHasFinished_Implementation()
 {
 	//특별 문구로 전환합니다.
-	CountdownText->SetText(TEXT("GO!"));
+	CountdownText->SetText(FText::FromString(TEXT("GO!")));
 }

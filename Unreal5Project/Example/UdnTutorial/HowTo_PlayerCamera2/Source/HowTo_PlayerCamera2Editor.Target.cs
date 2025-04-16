@@ -9,6 +9,9 @@ public class HowTo_PlayerCamera2EditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "HowTo_PlayerCamera2" } );
+        DefaultBuildSettings = BuildSettingsVersion.V5;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
+
+        ExtraModuleNames.AddRange( new string[] { "HowTo_PlayerCamera2" } );
 	}
 }

@@ -9,6 +9,9 @@ public class HowTo_UMGTarget : TargetRules
 	{
 		Type = TargetType.Game;
 
-		ExtraModuleNames.AddRange( new string[] { "HowTo_UMG" } );
+        DefaultBuildSettings = BuildSettingsVersion.V5;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
+
+        ExtraModuleNames.AddRange( new string[] { "HowTo_UMG" } );
 	}
 }

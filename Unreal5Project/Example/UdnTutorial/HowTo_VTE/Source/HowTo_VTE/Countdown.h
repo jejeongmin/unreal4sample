@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Engine/Classes/Components/TextRenderComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "Countdown.generated.h"
 
 UCLASS()
@@ -26,7 +26,7 @@ public:
 
 	// add comment here, then tooltip show in editor ( only English )
 	UPROPERTY(EditAnywhere)
-		int32 CountdownTime;
+	int32 CountdownTime;
 
 	UTextRenderComponent* CountdownText;
 
@@ -35,7 +35,8 @@ public:
 	void AdvanceTimer();
 
 	UFUNCTION(BlueprintNativeEvent)
-		void CountdownHasFinished();
+	void CountdownHasFinished();
+	
 	virtual void CountdownHasFinished_Implementation();
 
 	FTimerHandle CountdownTimerHandle;

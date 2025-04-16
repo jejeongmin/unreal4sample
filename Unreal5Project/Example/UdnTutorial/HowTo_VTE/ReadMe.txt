@@ -38,7 +38,7 @@ TextRenderComponent->SetHorizontalAlignment(EHTA_Center);
 TextRenderComponent->SetWorldSize(100.0f);
 렌더링되는 텍스트의 월드에서의 크기를 설정하는 함수이다. 
 
-TextRenderComponent->SetText(TEXT("TEXT"));
+CountdownText->SetText(FText::FromString(TEXT("GO!")));
 렌더링되는 텍스트의 문자열 내용을 설정하는 함수이다.
 
 
@@ -70,3 +70,12 @@ SetTimer() 함수는 타이머를 생성하고 시작시키는 함수로 여러가지 오버로드가 존재하
 
 GetWorldTimerManager().ClearTimer(TimerHandle);
 ClearTimer() 함수는 돌아가고 있는 타이머를 중지시키고 해당 핸들을 무효화시키는 함수이다.
+
+
+-----------------------------------------------------------------------------------------------------
+UE 4.19 -> 5.5
+
+주요 변경 사항
+
+Build.cs 파일 업데이트
+UTextRenderComponent 의 입력 인자가 FString 에서 FText 로 변경되었다. 관련 형변환 처리들 진행
