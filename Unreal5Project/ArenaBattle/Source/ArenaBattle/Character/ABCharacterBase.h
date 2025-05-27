@@ -62,6 +62,7 @@ protected:
 	virtual void NotifyComboActionEnd();
 	void SetComboCheckTimer();
 	void ComboCheck();
+	void StartComboMove();
 
 	int32 CurrentCombo = 0;
 	FTimerHandle ComboTimerHandle;
@@ -120,5 +121,9 @@ protected:
 
 private:
 	bool bIsComboMoving = false;
-	float ComboMoveSpeed; // 초당 이동 속도(원하는 값으로 조절)
+	float ComboMoveDistance = 50.f; // 총 이동 거리
+	float ComboMoveElapsed = 0.f;
+	float ComboMoveDuration = 0.2f; // 이동에 걸릴 시간(공격 판정까지의 시간, 필요시 조절)
+	FVector ComboMoveStart;
+	FVector ComboMoveEnd;
 };

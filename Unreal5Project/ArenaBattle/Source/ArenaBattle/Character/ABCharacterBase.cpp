@@ -108,8 +108,6 @@ AABCharacterBase::AABCharacterBase()
 	// Weapon Component
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
-
-	ComboMoveSpeed = 50.f; // 초당 이동 속도(원하는 값으로 조절)
 }
 
 void AABCharacterBase::PostInitializeComponents()
@@ -155,10 +153,28 @@ void AABCharacterBase::Tick(float DeltaTime)
 
 	if (bIsComboMoving)
 	{
-		// 앞으로 이동 (Z축은 고정)
-		FVector Forward = GetActorForwardVector();
-		AddActorWorldOffset(Forward * ComboMoveSpeed * DeltaTime, true);
+		ComboMoveElapsed += DeltaTime;
+		float Alpha = FMath::Clamp(ComboMoveElapsed / ComboMoveDuration, 0.f, 1.f);
+
+		// EaseOut: 초반 빠르고 후반 느리게 (지수 보간)
+		float EaseAlpha = FMath::InterpEaseOut(0.f, 1.f, Alpha, 2.5f);
+
+		FVector NewLocation = FMath::Lerp(ComboMoveStart, ComboMoveEnd, EaseAlpha);
+		SetActorLocation(NewLocation, true); // Sweep을 true로!
+
+		if (Alpha >= 1.f)
+		{
+			bIsComboMoving = false;
+		}
 	}
+}
+
+void AABCharacterBase::StartComboMove()
+{
+	bIsComboMoving = true;
+	ComboMoveElapsed = 0.f;
+	ComboMoveStart = GetActorLocation();
+	ComboMoveEnd = ComboMoveStart + GetActorForwardVector() * ComboMoveDistance;
 }
 
 void AABCharacterBase::ComboActionBegin()
@@ -170,7 +186,7 @@ void AABCharacterBase::ComboActionBegin()
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
 	// Combo 이동 시작
-	bIsComboMoving = true;
+	StartComboMove();
 
 	// Animation Setting
 	const float AttackSpeedRate = Stat->GetTotalStat().AttackSpeed;
@@ -226,6 +242,9 @@ void AABCharacterBase::ComboCheck()
 		AnimInstance->Montage_JumpToSection(NextSection, ComboActionMontage);
 		SetComboCheckTimer();
 		HasNextComboCommand = false;
+
+		// 콤보 연계 시에도 이동 시작
+		StartComboMove();
 	}
 }
 
@@ -246,6 +265,9 @@ void AABCharacterBase::AttackHitCheck()
 		FDamageEvent DamageEvent;
 		OutHitResult.GetActor()->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
 	}
+
+	// 공격 판정 시 이동 중지
+	bIsComboMoving = false;
 
 #if ENABLE_DRAW_DEBUG
 
