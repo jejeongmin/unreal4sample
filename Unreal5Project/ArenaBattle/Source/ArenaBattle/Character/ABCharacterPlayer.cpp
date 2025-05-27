@@ -4,6 +4,7 @@
 #include "Character/ABCharacterPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -12,6 +13,7 @@
 #include "CharacterStat/ABCharacterStatComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Interface/ABGameInterface.h"
+
 
 AABCharacterPlayer::AABCharacterPlayer()
 {
@@ -202,6 +204,12 @@ void AABCharacterPlayer::QuaterMove(const FInputActionValue& Value)
 
 void AABCharacterPlayer::Attack()
 {
+	if (GetCharacterMovement() && GetCharacterMovement()->IsFalling())
+	{
+		// 점프 중이므로 공격하지 않음
+		return;
+	}
+
 	ProcessComboCommand();
 }
 

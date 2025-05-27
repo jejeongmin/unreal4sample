@@ -81,6 +81,7 @@ protected:
 	void PlayDeadAnimation();
 
 	float DeadEventDelayTime = 5.0f;
+	float SinkEventDelayTime = 2.0f;
 
 // Stat Section
 protected:
@@ -112,4 +113,12 @@ public:
 	int32 GetLevel();
 	void SetLevel(int32 InNewLevel);
 	void ApplyStat(const FABCharacterStat& BaseStat, const FABCharacterStat& ModifierStat);
+
+// Movement Section
+protected:
+	virtual void Tick(float DeltaTime) override;
+
+private:
+	bool bIsComboMoving = false;
+	float ComboMoveSpeed; // 초당 이동 속도(원하는 값으로 조절)
 };

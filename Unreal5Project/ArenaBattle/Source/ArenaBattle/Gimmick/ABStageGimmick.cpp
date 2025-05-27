@@ -76,6 +76,8 @@ AABStageGimmick::AABStageGimmick()
 
 	// Stage Stat
 	CurrentStageNum = 0;
+
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AABStageGimmick::OnConstruction(const FTransform& Transform)
@@ -83,6 +85,62 @@ void AABStageGimmick::OnConstruction(const FTransform& Transform)
 	Super::OnConstruction(Transform);
 
 	SetState(CurrentState);
+}
+
+void AABStageGimmick::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bIsOpeningGates)
+	{
+		bool bAllOpened = true;
+		for (auto& Gate : Gates)
+		{
+			float& CurrentYaw = CurrentGateAngles[Gate.Key];
+			float TargetYaw = -90.0f;
+			float NewYaw = FMath::FInterpConstantTo(CurrentYaw, TargetYaw, DeltaTime, GateAnimSpeed);
+			if (FMath::Abs(NewYaw - TargetYaw) > 1.0f)
+			{
+				bAllOpened = false;
+			}
+			else
+			{
+				NewYaw = TargetYaw;
+			}
+			CurrentYaw = NewYaw;
+			Gate.Value->SetRelativeRotation(FRotator(0.0f, NewYaw, 0.0f));
+		}
+		if (bAllOpened)
+		{
+			bIsOpeningGates = false;
+			CurrentGateAngles.Empty();
+		}
+	}
+	else if (bIsClosingGates)
+	{
+		bool bAllClosed = true;
+		for (auto& Gate : Gates)
+		{
+			float& CurrentYaw = CurrentGateAngles[Gate.Key];
+			float TargetYaw = 0.0f;
+			float NewYaw = FMath::FInterpConstantTo(CurrentYaw, TargetYaw, DeltaTime, GateAnimSpeed);
+			if (FMath::Abs(NewYaw - TargetYaw) > 1.0f)
+			{
+				bAllClosed = false;
+			}
+			else
+			{
+				NewYaw = TargetYaw;
+			}
+			CurrentYaw = NewYaw;
+			Gate.Value->SetRelativeRotation(FRotator(0.0f, NewYaw, 0.0f));
+		}
+		if (bAllClosed)
+		{
+			bIsClosingGates = false;
+			CurrentGateAngles.Empty();
+		}
+	}
 }
 
 void AABStageGimmick::OnStageTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -123,17 +181,23 @@ void AABStageGimmick::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedC
 
 void AABStageGimmick::OpenAllGates()
 {
-	for (auto Gate : Gates)
+	bIsOpeningGates = true;
+	bIsClosingGates = false;
+	for (auto& Gate : Gates)
 	{
-		(Gate.Value)->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+		float CurrentYaw = Gate.Value->GetRelativeRotation().Yaw;
+		CurrentGateAngles.Add(Gate.Key, CurrentYaw);
 	}
 }
 
 void AABStageGimmick::CloseAllGates()
 {
-	for (auto Gate : Gates)
+	bIsClosingGates = true;
+	bIsOpeningGates = false;
+	for (auto& Gate : Gates)
 	{
-		(Gate.Value)->SetRelativeRotation(FRotator::ZeroRotator);
+		float CurrentYaw = Gate.Value->GetRelativeRotation().Yaw;
+		CurrentGateAngles.Add(Gate.Key, CurrentYaw);
 	}
 }
 

@@ -8,6 +8,8 @@
 
 AABCharacterNonPlayer::AABCharacterNonPlayer()
 {
+	PrimaryActorTick.bCanEverTick = true; // Tick 활성화
+
 	GetMesh()->SetHiddenInGame(true);
 
 	AIControllerClass = AABAIController::StaticClass();
@@ -23,6 +25,18 @@ void AABCharacterNonPlayer::PostInitializeComponents()
 	NPCMeshHandle = UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(NPCMeshes[RandIndex], FStreamableDelegate::CreateUObject(this, &AABCharacterNonPlayer::NPCMeshLoadCompleted));
 }
 
+void AABCharacterNonPlayer::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bIsSinking)
+	{
+		FVector NewLocation = GetActorLocation();
+		NewLocation.Z -= SinkSpeed * DeltaTime;
+		SetActorLocation(NewLocation);
+	}
+}
+
 void AABCharacterNonPlayer::SetDead()
 {
 	Super::SetDead();
@@ -32,6 +46,14 @@ void AABCharacterNonPlayer::SetDead()
 	{
 		ABAIController->StopAI();
 	}
+
+	FTimerHandle SinkTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(SinkTimerHandle, FTimerDelegate::CreateLambda(
+		[&]()
+		{
+			bIsSinking = true; // 가라앉기 시작
+		}
+	), SinkEventDelayTime, false);
 
 	FTimerHandle DeadTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda(

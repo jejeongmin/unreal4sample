@@ -108,6 +108,8 @@ AABCharacterBase::AABCharacterBase()
 	// Weapon Component
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
+
+	ComboMoveSpeed = 50.f; // 초당 이동 속도(원하는 값으로 조절)
 }
 
 void AABCharacterBase::PostInitializeComponents()
@@ -147,6 +149,18 @@ void AABCharacterBase::ProcessComboCommand()
 	}
 }
 
+void AABCharacterBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bIsComboMoving)
+	{
+		// 앞으로 이동 (Z축은 고정)
+		FVector Forward = GetActorForwardVector();
+		AddActorWorldOffset(Forward * ComboMoveSpeed * DeltaTime, true);
+	}
+}
+
 void AABCharacterBase::ComboActionBegin()
 {
 	// Combo Status
@@ -154,6 +168,9 @@ void AABCharacterBase::ComboActionBegin()
 
 	// Movement Setting
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
+	// Combo 이동 시작
+	bIsComboMoving = true;
 
 	// Animation Setting
 	const float AttackSpeedRate = Stat->GetTotalStat().AttackSpeed;
@@ -173,6 +190,9 @@ void AABCharacterBase::ComboActionEnd(UAnimMontage* TargetMontage, bool IsProper
 	ensure(CurrentCombo != 0);
 	CurrentCombo = 0;
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+
+	// Combo 이동 종료
+	bIsComboMoving = false;
 
 	NotifyComboActionEnd();
 }

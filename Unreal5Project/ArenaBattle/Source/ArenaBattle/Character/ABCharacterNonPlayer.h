@@ -21,6 +21,7 @@ public:
 
 protected:
 	virtual void PostInitializeComponents() override;
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	void SetDead() override;
@@ -44,4 +45,8 @@ protected:
 	FAICharacterAttackFinished OnAttackFinished;
 
 	virtual void NotifyComboActionEnd() override;
+
+private:
+	bool	bIsSinking = false;
+	float	SinkSpeed = 10.0f; // 초당 10 units, 필요에 따라 조절
 };

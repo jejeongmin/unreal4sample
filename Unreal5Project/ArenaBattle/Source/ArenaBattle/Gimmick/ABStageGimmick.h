@@ -40,6 +40,7 @@ public:
 
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
+	virtual void Tick(float DeltaTime) override;
 
 // Stage Section
 protected:
@@ -65,6 +66,12 @@ protected:
 
 	void OpenAllGates();
 	void CloseAllGates();
+
+private:
+	bool bIsOpeningGates = false;
+	bool bIsClosingGates = false;
+	float GateAnimSpeed = 180.0f; // 초당 180도(1초에 완전히 열림/닫힘)
+	TMap<FName, float> CurrentGateAngles;
 
 // State Section
 protected:
