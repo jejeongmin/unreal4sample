@@ -7,6 +7,7 @@
 #include "UI/ABGASWidgetComponent.h"
 #include "UI/ABGASUserWidget.h"
 
+
 AABGASCharacterNonPlayer::AABGASCharacterNonPlayer()
 {
 	ASC = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("ASC"));
@@ -51,4 +52,6 @@ void AABGASCharacterNonPlayer::PossessedBy(AController* NewController)
 void AABGASCharacterNonPlayer::OnOutOfHealth()
 {
 	SetDead();
+
+	ASC->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag(FName("GameplayCue.Character.DeadSink")), FGameplayCueParameters());
 }
