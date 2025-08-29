@@ -3,15 +3,15 @@
 
 #include "GC/ABGC_DeadSink.h"
 
-bool AABGC_DeadSink::OnActive_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters)
+bool AABGC_DeadSink::OnExecute_Implementation(AActor* Target, const FGameplayCueParameters& Parameters)
 {
-    Super::OnActive_Implementation(MyTarget, Parameters);
+    Super::OnExecute_Implementation(Target, Parameters);
     bIsSinking = true;
     ElapsedTime = 0.0f;
-    InitialLocation = MyTarget->GetActorLocation();
+    InitialLocation = Target->GetActorLocation();
     SetActorTickEnabled(true);
 
-	TargetActor = MyTarget; // TargetActor를 설정합니다.
+    TargetActor = Target; // TargetActor를 설정합니다.
 
     return true;
 }

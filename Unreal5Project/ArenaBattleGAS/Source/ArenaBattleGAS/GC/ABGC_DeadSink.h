@@ -15,7 +15,8 @@ class ARENABATTLEGAS_API AABGC_DeadSink : public AGameplayCueNotify_Actor
 	GENERATED_BODY()
 
 public:
-    virtual bool OnActive_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters) override;
+    virtual bool OnExecute_Implementation(AActor* Target, const FGameplayCueParameters& Parameters) override;
+
     virtual void Tick(float DeltaSeconds) override;
 
 protected:

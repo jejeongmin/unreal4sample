@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "AnimNotify_GASDeadSink.generated.h"
+#include "AnimNotify_GASDeadCheck.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ARENABATTLEGAS_API UAnimNotify_GASDeadSink : public UAnimNotify
+class ARENABATTLEGAS_API UAnimNotify_GASDeadCheck : public UAnimNotify
 {
 	GENERATED_BODY()
 	
 public:
-	UAnimNotify_GASDeadSink();
+	UAnimNotify_GASDeadCheck();
 
 protected:
 	virtual FString GetNotifyName_Implementation() const override;

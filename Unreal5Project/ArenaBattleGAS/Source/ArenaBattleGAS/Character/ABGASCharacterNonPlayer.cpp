@@ -6,6 +6,7 @@
 #include "Attribute/ABCharacterAttributeSet.h"
 #include "UI/ABGASWidgetComponent.h"
 #include "UI/ABGASUserWidget.h"
+#include <Tag/ABGameplayTag.h>
 
 
 AABGASCharacterNonPlayer::AABGASCharacterNonPlayer()
@@ -53,5 +54,8 @@ void AABGASCharacterNonPlayer::OnOutOfHealth()
 {
 	SetDead();
 
-	ASC->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag(FName("GameplayCue.Character.DeadSink")), FGameplayCueParameters());
+	if (HpBar)
+	{
+		HpBar->SetVisibility(false); // ¶Ç´Â HpBar->SetHiddenInGame(true);
+	}
 }
