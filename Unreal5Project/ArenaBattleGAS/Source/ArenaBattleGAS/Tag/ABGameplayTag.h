@@ -11,6 +11,7 @@
 
 #define ABTAG_GAMEPLAYCUE_CHARACTER_ATTACKHIT FGameplayTag::RequestGameplayTag(FName("GameplayCue.Character.AttackHit"))
 #define ABTAG_GAMEPLAYCUE_CHARACTER_DEADSINK FGameplayTag::RequestGameplayTag(FName("GameplayCue.Character.DeadSink"))
+#define ABTAG_GAMEPLAYCUE_CHARACTER_ComboMove FGameplayTag::RequestGameplayTag(FName("GameplayCue.Character.ComboMove"))
 
 #define ABTAG_EVENT_CHARACTER_WEAPONEQUIP FGameplayTag::RequestGameplayTag(FName("Event.Character.Weapon.Equip"))
 #define ABTAG_EVENT_CHARACTER_WEAPONUNEQUIP FGameplayTag::RequestGameplayTag(FName("Event.Character.Weapon.Unequip"))
