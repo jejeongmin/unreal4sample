@@ -12,7 +12,7 @@ UAnimNotify_GASDeadCheck::UAnimNotify_GASDeadCheck()
 
 FString UAnimNotify_GASDeadCheck::GetNotifyName_Implementation() const
 {
-    return TEXT("DeadCheck");
+    return TEXT("GASDeadCheck");
 }
 
 void UAnimNotify_GASDeadCheck::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)

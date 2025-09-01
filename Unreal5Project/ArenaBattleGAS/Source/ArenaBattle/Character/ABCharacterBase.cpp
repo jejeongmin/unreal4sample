@@ -71,11 +71,11 @@ AABCharacterBase::AABCharacterBase()
 		ComboActionData = ComboActionDataRef.Object;
 	}
 	
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Script/Engine.AnimMontage'/Game/ArenaBattleGAS/Animation/AM_Dead.AM_Dead'"));
-	if (DeadMontageRef.Object)
-	{
-		DeadMontage = DeadMontageRef.Object;
-	}
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Script/Engine.AnimMontage'/Game/ArenaBattleGAS/Animation/AM_Dead.AM_Dead'"));
+	//if (DeadMontageRef.Object)
+	//{
+	//	DeadMontage = DeadMontageRef.Object;
+	//}
 
 	// Weapon Component
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
