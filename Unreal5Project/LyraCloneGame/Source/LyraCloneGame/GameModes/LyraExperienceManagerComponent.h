@@ -37,6 +37,11 @@ public:
 	 */
 	void CallOrRegister_OnExperienceLoaded(FOnLyraExperienceLoaded::FDelegate&& Delegate);
 
+	void ServerSetCurrentExperience(FPrimaryAssetId ExperienceId);
+	void StartExperienceLoad();
+	void OnExperienceLoadComplete();
+	void OnExperienceFullLoadCompleted();
+
 public:
 
 	UPROPERTY()
