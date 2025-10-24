@@ -63,7 +63,7 @@ void ULyraExperienceManagerComponent::StartExperienceLoad()
 	// - 왜 이렇게 하는걸까?
 	// - GetPrimaryAssetId를 좀 더 자세히보자:
 	// - GetPrimaryAssetId를 살펴봄으로써, 아래의 두가지를 알 수 있다:
-	//   1. 우리는 B_HakDefaultExperience를 BP로 만든 이유
+	//   1. 우리는 B_LyraDefaultExperience를 BP로 만든 이유
 	//   2. CDO를 가져와서, GetPrimaryAssetId를 호출한 이유
 
 	// 우리는 앞서 이미 CDO로 로딩하여, CDO를 사용하지 않고 CDO를 사용하여 로딩할 에셋을 지정하여, BundleAssetList에 추가해준다!

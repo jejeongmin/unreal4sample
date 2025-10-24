@@ -76,7 +76,7 @@ void ALyraGameModeBase::HandleMatchAssignmentIfNotExpectingOne()
 	UWorld* World = GetWorld();
 
 	// fall back to the default experience
-	// 일단 기본 옵션으로 default하게 B_HakDefaultExperience로 설정놓자
+	// 일단 기본 옵션으로 default하게 B_LyraDefaultExperience로 설정놓자
 	if (!ExperienceId.IsValid())
 	{
 		ExperienceId = FPrimaryAssetId(FPrimaryAssetType("LyraExperienceDefinition"), FName("B_LyraDefaultExperience"));
@@ -122,10 +122,10 @@ const ULyraPawnData* ALyraGameModeBase::GetPawnDataForController(const AControll
 	// 게임 도중에 PawnData가 오버라이드 되었을 경우, PawnData는 PlayerState에서 가져오게 됨
 	if (InController)
 	{
-		if (const ALyraPlayerState* HakPS = InController->GetPlayerState<ALyraPlayerState>())
+		if (const ALyraPlayerState* LyraPS = InController->GetPlayerState<ALyraPlayerState>())
 		{
 			// GetPawnData 구현
-			if (const ULyraPawnData* PawnData = HakPS->GetPawnData<ULyraPawnData>())
+			if (const ULyraPawnData* PawnData = LyraPS->GetPawnData<ULyraPawnData>())
 			{
 				return PawnData;
 			}
