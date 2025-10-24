@@ -6,7 +6,9 @@
 #include "Character/LyraCharacter.h"
 #include "Player/LyraPlayerController.h"
 #include "Player/LyraPlayerState.h"
+#include "Character/LyraPawnData.h"
 #include "LyraExperienceManagerComponent.h"
+#include "LyraExperienceDefinition.h"
 #include "LyraLog.h"
 
 ALyraGameModeBase::ALyraGameModeBase()
@@ -98,4 +100,69 @@ void ALyraGameModeBase::OnMatchAssignmentGiven(FPrimaryAssetId ExperienceId)
 
 void ALyraGameModeBase::OnExperienceLoaded(const ULyraExperienceDefinition* CurrentExperience)
 {
+	// PlayerController를 순회하며
+	for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+	{
+		APlayerController* PC = Cast<APlayerController>(*Iterator);
+
+		// PlayerController가 Pawn을 Possess하지 않았다면, RestartPlayer를 통해 Pawn을 다시 Spawn한다
+		// - 한번 OnPossess를 보도록 하자:
+		if (PC && PC->GetPawn() == nullptr)
+		{
+			if (PlayerCanRestart(PC))
+			{
+				RestartPlayer(PC);
+			}
+		}
+	}
+}
+
+const ULyraPawnData* ALyraGameModeBase::GetPawnDataForController(const AController* InController) const
+{
+	// 게임 도중에 PawnData가 오버라이드 되었을 경우, PawnData는 PlayerState에서 가져오게 됨
+	if (InController)
+	{
+		if (const ALyraPlayerState* HakPS = InController->GetPlayerState<ALyraPlayerState>())
+		{
+			// GetPawnData 구현
+			if (const ULyraPawnData* PawnData = HakPS->GetPawnData<ULyraPawnData>())
+			{
+				return PawnData;
+			}
+		}
+	}
+
+	// fall back to the default for the current experience
+	// 아직 PlayerState에 PawnData가 설정되어 있지 않은 경우, ExperienceManagerComponent의 CurrentExperience로부터 가져와서 설정
+	check(GameState);
+	ULyraExperienceManagerComponent* ExperienceManagerComponent = GameState->FindComponentByClass<ULyraExperienceManagerComponent>();
+	check(ExperienceManagerComponent);
+
+	if (ExperienceManagerComponent->IsExperienceLoaded())
+	{
+		// GetExperienceChecked 구현
+		const ULyraExperienceDefinition* Experience = ExperienceManagerComponent->GetCurrentExperienceChecked();
+		if (Experience->DefaultPawnData)
+		{
+			return Experience->DefaultPawnData;
+		}
+	}
+
+	// 어떠한 케이스에도 핸들링 안되었으면 nullptr
+	return nullptr;
+}
+
+
+UClass* ALyraGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
+{
+	// GetPawnDataForController를 활용하여, PawnData로부터 PawnClass를 유도하자
+	if (const ULyraPawnData* PawnData = GetPawnDataForController(InController))
+	{
+		if (PawnData->PawnClass)
+		{
+			return PawnData->PawnClass;
+		}
+	}
+
+	return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
