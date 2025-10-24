@@ -2,13 +2,16 @@
 
 
 #include "Character/LyraCharacter.h"
+#include "LyraPawnExtensionComponent.h"
 
 // Sets default values
 ALyraCharacter::ALyraCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	// PawnExtComponent »ý¼º
+	PawnExtComponent = CreateDefaultSubobject<ULyraPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
 }
 
 // Called when the game starts or when spawned
