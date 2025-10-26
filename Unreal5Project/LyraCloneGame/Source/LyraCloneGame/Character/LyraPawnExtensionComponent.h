@@ -7,6 +7,7 @@
 #include "Components/GameFrameworkInitStateInterface.h"
 #include "LyraPawnExtensionComponent.generated.h"
 
+class ULyraPawnData;
 /**
  * 초기화 전반을 조정하는 컴포넌트
  */
@@ -32,4 +33,13 @@ public:
 	 * IGameFrameworkInitStateInterface
 	 */
 	virtual FName GetFeatureName() const final { return NAME_ActorFeatureName; }
+	virtual void OnActorInitStateChanged(const FActorInitStateChangedParams& Params) final;
+	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const final;
+	virtual void CheckDefaultInitialization() final;
+
+	/**
+	 * Pawn을 생성한 데이터를 캐싱
+	 */
+	UPROPERTY(EditInstanceOnly, Category = "Lyra|Pawn")
+	TObjectPtr<const ULyraPawnData> PawnData;
 };

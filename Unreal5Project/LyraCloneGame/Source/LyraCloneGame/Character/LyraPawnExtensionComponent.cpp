@@ -47,6 +47,7 @@ void ULyraPawnExtensionComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// FeatureName에 NAME_None을 넣으면, Actor에 등록된 Feature Component의 InitState 상태를 관찰하겠다는 의미:
+	// 내가 observing 할 feature 와 gameplaytag 상태를 지정하는 함수인데, NAME_None - 모든 피쳐에 대해서 FGameplayTag() - 빈 태그, 즉 모든 태그 상태를 observing 하겠다는 의미이다.
 	BindOnActorInitStateChanged(NAME_None, FGameplayTag(), false);
 
 	// InitState_Spawned로 상태 변환:
@@ -69,4 +70,98 @@ void ULyraPawnExtensionComponent::EndPlay(const EEndPlayReason::Type EndPlayReas
 	UnregisterInitStateFeature();
 
 	Super::EndPlay(EndPlayReason);
+}
+
+void ULyraPawnExtensionComponent::OnActorInitStateChanged(const FActorInitStateChangedParams& Params)
+{
+	if (Params.FeatureName != NAME_ActorFeatureName)
+	{
+		// ULyraPawnExtensionComponent는 다른 Feature Component들의 상태가 DataAvailable를 관찰하여, Sync를 맞추는 구간이 있었다 (CanChangeInitState)
+		// - 이를 가능케하기 위해, OnActorInitStateChanged에서는 DataAvailable에 대해 지속적으로 CheckDefaultInitialization을 호출하여, 상태를 확인한다
+		const FLyraGameplayTags& InitTags = FLyraGameplayTags::Get();
+		if (Params.FeatureState == InitTags.InitState_DataAvailable)
+		{
+			CheckDefaultInitialization();
+		}
+	}
+}
+
+bool ULyraPawnExtensionComponent::CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const
+{
+	check(Manager);
+
+	APawn* Pawn = GetPawn<APawn>();
+	const FLyraGameplayTags& InitTags = FLyraGameplayTags::Get();
+
+	// InitState_Spawned 초기화
+	if (!CurrentState.IsValid() && DesiredState == InitTags.InitState_Spawned)
+	{
+		// Pawn이 잘 세팅만 되어있으면 바로 Spawned로 넘어감!
+		if (Pawn)
+		{
+			return true;
+		}
+	}
+
+	// Spawned -> DataAvailable
+	if (CurrentState == InitTags.InitState_Spawned && DesiredState == InitTags.InitState_DataAvailable)
+	{
+		// 아마 PawnData를 누군가 설정하는 모양이다
+		if (!PawnData)
+		{
+			return false;
+		}
+
+		// LocallyControlled인 Pawn이 Controller가 없으면 에러!
+		const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
+		if (bIsLocallyControlled)
+		{
+			if (!GetController<AController>())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// DataAvailable -> DataInitialized
+	if (CurrentState == InitTags.InitState_DataAvailable && DesiredState == InitTags.InitState_DataInitialized)
+	{
+		// Actor에 바인드된 모든 Feature들이 DataAvailable 상태일 때, DataInitialized로 넘어감:
+		// - HaveAllFeaturesReachedInitState 확인
+		return Manager->HaveAllFeaturesReachedInitState(Pawn, InitTags.InitState_DataAvailable);
+	}
+
+	// DataInitialized -> GameplayReady
+	if (CurrentState == InitTags.InitState_DataInitialized && DesiredState == InitTags.InitState_GameplayReady)
+	{
+		return true;
+	}
+
+	// 위의 선형적인(linear) transition이 아니면 false!
+	return false;
+}
+
+void ULyraPawnExtensionComponent::CheckDefaultInitialization()
+{
+	// PawnExtensionComponent는 Feature Component들의 초기화를 관장하는 Component이다:
+	// - 따라서, Actor에 바인딩된 Feature Component들에 대해 CheckDefaultInitialization을 호출해주도록 한다 (ForceUpdate 느낌?)
+	// - 이 메서드를 IGameFrameworkInitStateInterface가 제공하는데, CheckDefaultInitializationForImplementers이다:
+	// - 간단히 CheckDefaultInitializationForImplementers 보자:
+	CheckDefaultInitializationForImplementers();
+
+	const FLyraGameplayTags& InitTags = FLyraGameplayTags::Get();
+
+	// 사용자 정의 InitState를 직접 넘겨줘야 한다... (사실 이건 좀 알아서 할 수 있을거 같은데 굳이...)
+	// 고정적으로 정해진 동작이기 때문에, 매번 실행할 때 TArray를 새로 생성하지 않도록 static으로 선언:
+	static const TArray<FGameplayTag> StateChain = { InitTags.InitState_Spawned, InitTags.InitState_DataAvailable, InitTags.InitState_DataInitialized, InitTags.InitState_GameplayReady };
+
+	// CanChangeInitState()와 HandleChangeInitState() 그리고 ChangeFeatureInitState 호출을 통한 OnActorInitStateChanged Delegate 호출까지 진행해준다:
+	// 아래의 코드를 간단히 보자:
+	// - 해당 코드까지 보면, 우리는 간단히 짐작할 수 있다:
+	//   - 계속 상태를 가능할때까지 한번 업데이트 한다
+	//   - InitState에 대한 변화는 Linear(선형적)임을!... -> 나중에 Diagram으로 정리하면서 보자
+	//     - 업데이트가 멈추면 누군가 시작해줘야 함을 의미! (chaining)
+	ContinueInitStateChain(StateChain);
 }
