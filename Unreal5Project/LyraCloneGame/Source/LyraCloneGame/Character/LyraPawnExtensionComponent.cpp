@@ -17,6 +17,24 @@ ULyraPawnExtensionComponent::ULyraPawnExtensionComponent(const FObjectInitialize
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void ULyraPawnExtensionComponent::SetPawnData(const ULyraPawnData* InPawnData)
+{
+	// Pawn에 대해 Authority가 없을 경우, SetPawnData는 진행하지 않음
+	APawn* Pawn = GetPawnChecked<APawn>();
+	if (Pawn->GetLocalRole() != ROLE_Authority)
+	{
+		return;
+	}
+
+	if (PawnData)
+	{
+		return;
+	}
+
+	// PawnData 업데이트
+	PawnData = InPawnData;
+}
+
 /*
 	컴포넌트가 부착되는 시점이다.
 */
