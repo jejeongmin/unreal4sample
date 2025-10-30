@@ -7,6 +7,7 @@
 #include "LyraGameplayTags.h"
 #include "LyraLog.h"
 #include "LyraPawnExtensionComponent.h"
+#include "Character/LyraPawnData.h"
 
 
 /** FeatureName 정의: static member variable 초기화 */
@@ -131,12 +132,12 @@ void ULyraHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* M
 
 		// Input과 Camera에 대한 핸들링... (TODO)
 
-		//const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
-		//const ULyraPawnData* PawnData = nullptr;
-		//if (ULyraPawnExtensionComponent* PawnExtComp = ULyraPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
-		//{
-		//	PawnData = PawnExtComp->GetPawnData<ULyraPawnData>();
-		//}
+		const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
+		const ULyraPawnData* PawnData = nullptr;
+		if (ULyraPawnExtensionComponent* PawnExtComp = ULyraPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+		{
+			PawnData = PawnExtComp->GetPawnData<ULyraPawnData>();
+		}
 
 		//if (bIsLocallyControlled && PawnData)
 		//{
