@@ -23,6 +23,15 @@ public:
 	static const FName NAME_ActorFeatureName;
 
 	/**
+	* member methods
+	*/
+	static ULyraPawnExtensionComponent* FindPawnExtensionComponent(const AActor* Actor) { return (Actor ? Actor->FindComponentByClass<ULyraPawnExtensionComponent>() : nullptr); }
+	template <class T>
+	const T* GetPawnData() const { return Cast<T>(PawnData); }
+	void SetPawnData(const ULyraPawnData* InPawnData);
+	void SetupPlayerInputComponent();
+
+	/**
 	* UPawnComponent interfaces
 	 */
 	virtual void OnRegister() final;

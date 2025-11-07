@@ -4,6 +4,7 @@
 #include "Player/LyraPlayerState.h"
 #include "GameModes/LyraExperienceManagerComponent.h"
 #include <GameModes/LyraGameModeBase.h>
+#include "LyraPawnExtensionComponent.h"
 
 void ALyraPlayerState::PostInitializeComponents()
 {

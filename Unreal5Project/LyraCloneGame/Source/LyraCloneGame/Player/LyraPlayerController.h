@@ -13,5 +13,7 @@ UCLASS()
 class LYRACLONEGAME_API ALyraPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	ALyraPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

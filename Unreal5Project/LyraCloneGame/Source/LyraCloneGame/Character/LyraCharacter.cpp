@@ -2,6 +2,7 @@
 
 
 #include "Character/LyraCharacter.h"
+#include "Camera/LyraCameraComponent.h"
 #include "LyraPawnExtensionComponent.h"
 
 // Sets default values
@@ -12,6 +13,12 @@ ALyraCharacter::ALyraCharacter()
 
 	// PawnExtComponent 持失
 	PawnExtComponent = CreateDefaultSubobject<ULyraPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
+
+	// CameraComponent 持失
+	{
+		CameraComponent = CreateDefaultSubobject<ULyraCameraComponent>(TEXT("CameraComponent"));
+		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
+	}
 }
 
 // Called when the game starts or when spawned
