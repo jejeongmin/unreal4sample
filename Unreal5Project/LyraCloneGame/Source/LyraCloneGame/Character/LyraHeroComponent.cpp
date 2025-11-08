@@ -2,13 +2,13 @@
 
 
 #include "Character/LyraHeroComponent.h"
-#include "LyraLog.h"
-#include "Character/LyraPawnExtensionComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
+#include <Player/LyraPlayerState.h>
 #include "LyraGameplayTags.h"
-#include "Camera/LyraCameraMode.h"
-#include "Camera/LyraCameraComponent.h"
-#include "Player/LyraPlayerState.h"
+#include "LyraLog.h"
+#include "LyraPawnExtensionComponent.h"
+#include "Character/LyraPawnData.h"
+
 
 /** FeatureName 정의: static member variable 초기화 */
 const FName ULyraHeroComponent::NAME_ActorFeatureName("Hero");
@@ -18,7 +18,6 @@ ULyraHeroComponent::ULyraHeroComponent(const FObjectInitializer& ObjectInitializ
 	PrimaryComponentTick.bStartWithTickEnabled = false;
 	PrimaryComponentTick.bCanEverTick = false;
 }
-
 
 void ULyraHeroComponent::OnRegister()
 {
@@ -57,13 +56,14 @@ void ULyraHeroComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
+
 void ULyraHeroComponent::OnActorInitStateChanged(const FActorInitStateChangedParams& Params)
 {
 	const FLyraGameplayTags& InitTags = FLyraGameplayTags::Get();
 
 	if (Params.FeatureName == ULyraPawnExtensionComponent::NAME_ActorFeatureName)
 	{
-		// LyraPawnExtensionComponent의 DataInitialized 상태 변화 관찰 후, LyraHeroComponent도 DataInitialized 상태로 변경
+		// HakPawnExtensionComponent의 DataInitialized 상태 변화 관찰 후, HakHeroComponent도 DataInitialized 상태로 변경
 		// - CanChangeInitState 확인
 		if (Params.FeatureState == InitTags.InitState_DataInitialized)
 		{
@@ -139,14 +139,14 @@ void ULyraHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* M
 			PawnData = PawnExtComp->GetPawnData<ULyraPawnData>();
 		}
 
-		if (bIsLocallyControlled && PawnData)
-		{
-			// 현재 LyraCharacter에 Attach된 CameraComponent를 찾음
-			if (ULyraCameraComponent* CameraComponent = ULyraCameraComponent::FindCameraComponent(Pawn))
-			{
-				CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
-			}
-		}
+		//if (bIsLocallyControlled && PawnData)
+		//{
+		//	// 현재 HakCharacter에 Attach된 CameraComponent를 찾음
+		//	if (UHakCameraComponent* CameraComponent = UHakCameraComponent::FindCameraComponent(Pawn))
+		//	{
+		//		CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
+		//	}
+		//}
 	}
 }
 
@@ -158,23 +158,4 @@ void ULyraHeroComponent::CheckDefaultInitialization()
 	const FLyraGameplayTags& InitTags = FLyraGameplayTags::Get();
 	static const TArray<FGameplayTag> StateChain = { InitTags.InitState_Spawned, InitTags.InitState_DataAvailable, InitTags.InitState_DataInitialized, InitTags.InitState_GameplayReady };
 	ContinueInitStateChain(StateChain);
-}
-
-TSubclassOf<ULyraCameraMode> ULyraHeroComponent::DetermineCameraMode() const
-{
-	const APawn* Pawn = GetPawn<APawn>();
-	if (!Pawn)
-	{
-		return nullptr;
-	}
-
-	if (ULyraPawnExtensionComponent* PawnExtComp = ULyraPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
-	{
-		if (const ULyraPawnData* PawnData = PawnExtComp->GetPawnData<ULyraPawnData>())
-		{
-			return PawnData->DefaultCameraMode;
-		}
-	}
-
-	return nullptr;
 }

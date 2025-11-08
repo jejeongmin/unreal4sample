@@ -7,8 +7,6 @@
 #include "Components/GameFrameworkInitStateInterface.h"
 #include "LyraHeroComponent.generated.h"
 
-class ULyraCameraMode;
-
 /**
  * component that sets up input and camera handling for player controlled pawns (or bots that simulate players)
  * - this depends on a PawnExtensionComponent to coordinate initialization
@@ -43,9 +41,4 @@ public:
 	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const final;
 	virtual void HandleChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) final;
 	virtual void CheckDefaultInitialization() final;
-
-	/**
-	 * member methods
-	 */
-	TSubclassOf<ULyraCameraMode> DetermineCameraMode() const;
 };
