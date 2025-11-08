@@ -189,9 +189,3 @@ void ULyraPawnExtensionComponent::CheckDefaultInitialization()
 	//     - 업데이트가 멈추면 누군가 시작해줘야 함을 의미! (chaining)
 	ContinueInitStateChain(StateChain);
 }
-
-void ULyraPawnExtensionComponent::SetupPlayerInputComponent()
-{
-	// ForceUpdate로 다시 InitState 상태 변환 시작 (연결 고리)
-	CheckDefaultInitialization();
-}
