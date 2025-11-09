@@ -36,7 +36,7 @@ void ULyraCameraComponent::UpdateCameraModes()
 	{
 		if (const TSubclassOf<ULyraCameraMode> CameraMode = DetermineCameraModeDelegate.Execute())
 		{
-			// CameraModeStack->PushCameraMode(CameraMode);
+			CameraModeStack->PushCameraMode(CameraMode);
 		}
 	}
 }
