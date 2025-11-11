@@ -31,7 +31,8 @@ public:
 	/**
 	* member methods
 	*/
-	void UpdateCameraModes();
+	AActor* GetTargetActor() const { return GetOwner(); }
+	void UpdateCameraModes();	
 
 	/**
 	 * CameraComponent interface

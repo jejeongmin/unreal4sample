@@ -6,6 +6,7 @@
 #include "Camera/LyraCameraMode.h"
 #include "LyraCameraMode_ThirdPerson.generated.h"
 
+class UCurveVector;
 /**
  * 
  */
@@ -16,4 +17,15 @@ class LYRACLONEGAME_API ULyraCameraMode_ThirdPerson : public ULyraCameraMode
 	
 public:
 	ULyraCameraMode_ThirdPerson(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	/**
+	* ULyraCameraMode's interface
+	*/
+	virtual void UpdateView(float DeltaTime) override;
+
+	/**
+	 * member variables
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Third Person")
+	TObjectPtr<const UCurveVector> TargetOffsetCurve;
 };
