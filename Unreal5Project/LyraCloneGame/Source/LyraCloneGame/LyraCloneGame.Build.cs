@@ -10,9 +10,14 @@ public class LyraCloneGame : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { 
             "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
-            "GameplayTags",     // GAS
-            "ModularGameplay",  // Game Features
+            // GAS
+            "GameplayTags",
+            // Game Features
+            "ModularGameplay",
             "GameFeatures",
+            // input
+            "InputCore",
+            "EnhancedInput",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

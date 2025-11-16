@@ -7,6 +7,7 @@
 #include "LyraPawnData.generated.h"
 
 class ULyraCameraMode;
+class ULyraInputConfig;
 
 /**
  * 
@@ -26,4 +27,8 @@ public:
 	/** Camera Mode */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lyra|Camera")
 	TSubclassOf<ULyraCameraMode> DefaultCameraMode;
+
+	/** input configuration used by player controlled pawns to create input mappings and bind input actions */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lyra|InputConfig")
+	TObjectPtr<ULyraInputConfig> InputConfig;
 };

@@ -5,9 +5,12 @@
 #include "CoreMinimal.h"
 #include "Components/PawnComponent.h"
 #include "Components/GameFrameworkInitStateInterface.h"
+#include <Input/LyraMappableConfigPair.h>
+#include <InputActionValue.h>
 #include "LyraHeroComponent.generated.h"
 
 class ULyraCameraMode;
+
 /**
  * component that sets up input and camera handling for player controlled pawns (or bots that simulate players)
  * - this depends on a PawnExtensionComponent to coordinate initialization
@@ -47,4 +50,13 @@ public:
 	 * member methods
 	 */
 	TSubclassOf<ULyraCameraMode> DetermineCameraMode() const;
+	void InitializePlayerInput(UInputComponent* PlayerInputComponent);
+	void Input_Move(const FInputActionValue& InputActionValue);
+	void Input_LookMouse(const FInputActionValue& InputActionValue);
+
+	/**
+	* member variables
+	*/
+	UPROPERTY(EditAnywhere)
+	TArray<FLyraMappableConfigPair> DefaultInputConfigs;
 };
