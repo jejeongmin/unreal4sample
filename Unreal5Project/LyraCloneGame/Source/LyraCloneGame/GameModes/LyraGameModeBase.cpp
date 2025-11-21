@@ -11,6 +11,7 @@
 #include "LyraExperienceManagerComponent.h"
 #include "LyraExperienceDefinition.h"
 #include "LyraLog.h"
+#include <Kismet/GameplayStatics.h>
 
 ALyraGameModeBase::ALyraGameModeBase()
 {
@@ -97,6 +98,14 @@ void ALyraGameModeBase::HandleMatchAssignmentIfNotExpectingOne()
 	// - default experience
 
 	UWorld* World = GetWorld();
+
+	// 우리가 앞서, URL과 함께 ExtraArgs로 넘겼던 정보는 OptionsString에 저정되어 있다.
+	if (!ExperienceId.IsValid() && UGameplayStatics::HasOption(OptionsString, TEXT("Experience")))
+	{
+		// Experience의 Value를 가져와서, PrimaryAssetId를 생성해준다: 이때, LyraExperienceDefinition의 Class 이름을 사용한다
+		const FString ExperienceFromOptions = UGameplayStatics::ParseOption(OptionsString, TEXT("Experience"));
+		ExperienceId = FPrimaryAssetId(FPrimaryAssetType(ULyraExperienceDefinition::StaticClass()->GetFName()), FName(*ExperienceFromOptions));
+	}
 
 	// fall back to the default experience
 	// 일단 기본 옵션으로 default하게 B_LyraDefaultExperience로 설정놓자
