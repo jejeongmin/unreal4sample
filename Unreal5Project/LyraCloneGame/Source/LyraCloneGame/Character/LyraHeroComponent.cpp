@@ -19,6 +19,9 @@
 /** FeatureName 정의: static member variable 초기화 */
 const FName ULyraHeroComponent::NAME_ActorFeatureName("Hero");
 
+/** InputConfig의 GameFeatureAction 활성화 ExtensioEvent 이름 */
+const FName ULyraHeroComponent::NAME_BindInputsNow("BindInputsNow");
+
 ULyraHeroComponent::ULyraHeroComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	PrimaryComponentTick.bStartWithTickEnabled = false;
@@ -258,6 +261,9 @@ void ULyraHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCompo
 			}
 		}
 	}
+
+	// GameFeatureAction_AddInputConfig의 HandlePawnExtension 콜백 함수 전달
+	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(const_cast<APawn*>(Pawn), NAME_BindInputsNow);
 }
 
 
