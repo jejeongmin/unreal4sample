@@ -45,6 +45,14 @@ struct FLyraCharacterPartList
 	{
 	}
 
+	bool SpawnActorForEntry(FLyraAppliedCharacterPartEntry& Entry);
+	void DestroyActorForEntry(FLyraAppliedCharacterPartEntry& Entry);
+
+	FLyraCharacterPartHandle AddEntry(FLyraCharacterPart NewPart);
+	void RemoveEntry(FLyraCharacterPartHandle Handle);
+
+	FGameplayTagContainer CollectCombinedTags() const;
+
 	/** 현재 인스턴스화된 Character Part */
 	UPROPERTY()
 	TArray<FLyraAppliedCharacterPartEntry> Entries;
@@ -67,6 +75,15 @@ class LYRACLONEGAME_API ULyraPawnComponent_CharacterParts : public UPawnComponen
 
 public:
 	ULyraPawnComponent_CharacterParts(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	USkeletalMeshComponent* GetParentMeshComponent() const;
+	USceneComponent* GetSceneComponentToAttachTo() const;
+	
+	FGameplayTagContainer GetCombinedTags(FGameplayTag RequiredPrefix) const;
+	void BroadcastChanged();
+
+	FLyraCharacterPartHandle AddCharacterPart(const FLyraCharacterPart& NewPart);
+	void RemoveCharacterPart(FLyraCharacterPartHandle Handle);
 
 	/** 인스턴스화 된 Character Parts */
 	UPROPERTY()
