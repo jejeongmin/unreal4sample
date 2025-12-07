@@ -26,6 +26,24 @@ class LYRACLONEGAME_API ULyraQuickBarComponent : public UControllerComponent
 public:
 	ULyraQuickBarComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	/**
+	* ControllerComponent interface
+	*/
+	virtual void BeginPlay() override;
+
+	/**
+	* member methods
+	*/
+	ULyraEquipmentManagerComponent* FindEquipmentManager() const;
+	void UnequipItemInSlot();
+	void EquipItemInSlot();
+
+	UFUNCTION(BlueprintCallable)
+	void AddItemToSlot(int32 SlotIndex, ULyraInventoryItemInstance* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Lyra")
+	void SetActiveSlotIndex(int32 NewIndex);
+
 	/** HUD QuickBar Slot °¹¼ö */
 	UPROPERTY()
 	int32 NumSlots = 3;

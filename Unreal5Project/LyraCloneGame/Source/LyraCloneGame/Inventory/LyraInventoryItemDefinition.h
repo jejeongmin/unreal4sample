@@ -25,7 +25,7 @@ public:
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class LYRACLONEGAME_API ULyraInventoryItemDefinition : public UObject
 {
 	GENERATED_BODY()

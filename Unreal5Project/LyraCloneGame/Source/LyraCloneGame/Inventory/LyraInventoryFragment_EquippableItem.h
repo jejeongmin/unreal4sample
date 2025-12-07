@@ -11,7 +11,8 @@ UCLASS()
 class ULyraInventoryFragment_EquippableItem : public ULyraInventoryItemFragment
 {
 	GENERATED_BODY()
+
 public:
-	/*UPROPERTY(EditAnywhere, Category = Lyra)
-	TSubclassOf<ULyraEquipmentDefinition> EquipmentDefinition;*/
+	UPROPERTY(EditAnywhere, Category = Lyra)
+	TSubclassOf<ULyraEquipmentDefinition> EquipmentDefinition;
 };

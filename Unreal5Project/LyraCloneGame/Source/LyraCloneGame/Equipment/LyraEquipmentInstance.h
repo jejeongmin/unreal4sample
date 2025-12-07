@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "LyraEquipmentInstance.generated.h"
 
+struct FLyraEquipmentActorToSpawn;
+
 /**
  * 
  */
@@ -17,11 +19,32 @@ class LYRACLONEGAME_API ULyraEquipmentInstance : public UObject
 public:
 	ULyraEquipmentInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	/**
+	* Blueprint 정의를 위한 Equip/Unequip 함수
+	*/
+	UFUNCTION(BlueprintImplementableEvent, Category = Equipment, meta = (DisplayName = "OnEquipped"))
+	void K2_OnEquipped();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Equipment, meta = (DisplayName = "OnUnequipped"))
+	void K2_OnUnequipped();
+
+	UFUNCTION(BlueprintPure, Category = Equipment)
+	APawn* GetPawn() const;
+
+	void SpawnEquipmentActors(const TArray<FLyraEquipmentActorToSpawn>& ActorsToSpawn);
+	void DestroyEquipmentActors();
+
+	/**
+	* interfaces
+	*/
+	virtual void OnEquipped();
+	virtual void OnUnequipped();
+
 	/** 어떤 InventoryItemInstance에 의해 활성화되었는지 (추후, QuickBarComponent에서 보게 될것이다) */
 	UPROPERTY()
 	TObjectPtr<UObject> Instigator;
 
-	/** HakEquipementDefinition에 맞게 Spawn된 Actor Instance들 */
+	/** FLyraEquipmentDefinition에 맞게 Spawn된 Actor Instance들 */
 	UPROPERTY()
 	TArray<TObjectPtr<AActor>> SpawnedActors;
 };

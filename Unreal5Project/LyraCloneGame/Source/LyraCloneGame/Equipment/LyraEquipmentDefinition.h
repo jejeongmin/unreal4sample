@@ -27,9 +27,9 @@ struct FLyraEquipmentActorToSpawn
 };
 
 /**
- * 
+ * LyraEquipmentDefinition은 장착 아이템에 대한 정의 클래스(메타 데이터)이다
  */
-UCLASS()
+UCLASS(Blueprintable)
 class LYRACLONEGAME_API ULyraEquipmentDefinition : public UObject
 {
 	GENERATED_BODY()

@@ -59,6 +59,9 @@ class LYRACLONEGAME_API ULyraEquipmentManagerComponent : public UPawnComponent
 public:
 	ULyraEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	ULyraEquipmentInstance* EquipItem(TSubclassOf<ULyraEquipmentDefinition> EquipmentDefinition);
+	void UnequipItem(ULyraEquipmentInstance* ItemInstance);
+
 	UPROPERTY()
 	FLyraEquipmentList EquipmentList;	
 };
