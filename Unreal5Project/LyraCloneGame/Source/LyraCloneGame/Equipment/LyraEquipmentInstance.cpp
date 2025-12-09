@@ -56,6 +56,19 @@ void ULyraEquipmentInstance::DestroyEquipmentActors()
 	}
 }
 
+APawn* ULyraEquipmentInstance::GetTypedPawn(TSubclassOf<APawn> PawnType) const
+{
+	APawn* Result = nullptr;
+	if (UClass* ActualPawnType = PawnType)
+	{
+		if (GetOuter()->IsA(ActualPawnType))
+		{
+			Result = Cast<APawn>(GetOuter());
+		}
+	}
+	return Result;
+}
+
 void ULyraEquipmentInstance::OnEquipped()
 {
 	K2_OnEquipped();
