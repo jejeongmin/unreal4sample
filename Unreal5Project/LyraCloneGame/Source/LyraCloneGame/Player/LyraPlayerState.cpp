@@ -5,10 +5,30 @@
 #include "GameModes/LyraExperienceManagerComponent.h"
 #include "GameModes/LyraGameModeBase.h"
 #include "Character/LyraPawnExtensionComponent.h"
+#include "AbilitySystem/LyraAbilitySystemComponent.h"
+#include "AbilitySystem/LyraAbilitySet.h"
+#include "Character/LyraPawnData.h"
+
+ALyraPlayerState::ALyraPlayerState(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<ULyraAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
+}
 
 void ALyraPlayerState::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	check(AbilitySystemComponent);
+	// 아래의 코드는 우리가 InitAbilityActorInfo를 재호출을 통하는 이유를 설명하는 코드이다:
+	{
+		// 처음 InitAbilityActorInfo를 호출 당시, OwnerActor와 AvatarActo가 같은 Actor를 가르키고 있으며, 이는 PlayerState이다
+		// - OwnerActor는 PlayerState가 의도하는게 맞지만, AvatarActor는 PlayerController가 소유하는 대상인 Pawn이 되어야 한다!
+		// - 이를 위해 재-세팅을 해준다
+		FGameplayAbilityActorInfo* ActorInfo = AbilitySystemComponent->AbilityActorInfo.Get();
+		check(ActorInfo->OwnerActor == this);
+		check(ActorInfo->OwnerActor == ActorInfo->AvatarActor);
+	}
+	AbilitySystemComponent->InitAbilityActorInfo(this, GetPawn());
 
 	const AGameStateBase* GameState = GetWorld()->GetGameState();
 	check(GameState);
@@ -40,4 +60,14 @@ void ALyraPlayerState::SetPawnData(const ULyraPawnData* InPawnData)
 	check(!PawnData);
 
 	PawnData = InPawnData;
+
+	// PawnData의 AbilitySet을 순회하며, ASC에 Ability를 할당(Give)한다
+	// - 이 과정에서 ASC의 ActivatableAbilities에 추가된다
+	for (ULyraAbilitySet* AbilitySet : PawnData->AbilitySets)
+	{
+		if (AbilitySet)
+		{
+			AbilitySet->GiveToAbilitySystem(AbilitySystemComponent, nullptr);
+		}
+	}
 }

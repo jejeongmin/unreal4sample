@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerState.h"
 #include "LyraPlayerState.generated.h"
 
+class ULyraAbilitySystemComponent;
 class ULyraExperienceDefinition;
 class ULyraPawnData;
 
@@ -18,6 +19,9 @@ class LYRACLONEGAME_API ALyraPlayerState : public APlayerState
 	GENERATED_BODY()
 
 public:
+
+	ALyraPlayerState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
 	/**
 	 * AActor's interface
 	 */
@@ -31,7 +35,11 @@ public:
 
 	void OnExperienceLoaded(const ULyraExperienceDefinition* CurrentExperience);
 	void SetPawnData(const ULyraPawnData* InPawnData);
+	ULyraAbilitySystemComponent* GetLyraAbilitySystemComponent() const { return AbilitySystemComponent; }
 
 	UPROPERTY()
 	TObjectPtr<const ULyraPawnData> PawnData;
+
+	UPROPERTY(VisibleAnywhere, Category = "Lyra|PlayerState")
+	TObjectPtr<ULyraAbilitySystemComponent> AbilitySystemComponent;
 };

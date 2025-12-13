@@ -4,19 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "ModularCharacter.h"
+#include "AbilitySystemInterface.h"
 #include "LyraCharacter.generated.h"
 
 class ULyraPawnExtensionComponent;
 class ULyraCameraComponent;
 
 UCLASS()
-class LYRACLONEGAME_API ALyraCharacter : public AModularCharacter
+class LYRACLONEGAME_API ALyraCharacter : public AModularCharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
 	ALyraCharacter();
+
+	/**
+	 * IAbilitySystemInterface
+	 */
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

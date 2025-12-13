@@ -7,6 +7,7 @@
 #include "Components/GameFrameworkInitStateInterface.h"
 #include "LyraPawnExtensionComponent.generated.h"
 
+class ULyraAbilitySystemComponent;
 class ULyraPawnData;
 /**
  * 초기화 전반을 조정하는 컴포넌트
@@ -30,6 +31,11 @@ public:
 	const T* GetPawnData() const { return Cast<T>(PawnData); }
 	void SetPawnData(const ULyraPawnData* InPawnData);
 	void SetupPlayerInputComponent();
+	ULyraAbilitySystemComponent* GetLyraAbilitySystemComponent() const { return AbilitySystemComponent; }
+
+	/** AbilitySystemComponent의 AvatorActor 대상 초기화/해제 호출 */
+	void InitializeAbilitySystem(ULyraAbilitySystemComponent* InASC, AActor* InOwnerActor);
+	void UninitializeAbilitySystem();
 
 	/**
 	* UPawnComponent interfaces
@@ -51,4 +57,8 @@ public:
 	 */
 	UPROPERTY(EditInstanceOnly, Category = "Lyra|Pawn")
 	TObjectPtr<const ULyraPawnData> PawnData;
+
+	/** AbilitySystemComponent 캐싱 */
+	UPROPERTY()
+	TObjectPtr<ULyraAbilitySystemComponent> AbilitySystemComponent = nullptr;
 };

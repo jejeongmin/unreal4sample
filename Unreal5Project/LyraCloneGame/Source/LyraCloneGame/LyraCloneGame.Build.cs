@@ -12,6 +12,8 @@ public class LyraCloneGame : ModuleRules
             "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
             // GAS
             "GameplayTags",
+            "GameplayTasks",
+            "GameplayAbilities",
             // Game Features
             "ModularGameplay",
             "GameFeatures",

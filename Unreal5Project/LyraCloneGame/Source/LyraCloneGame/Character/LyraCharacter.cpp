@@ -4,6 +4,7 @@
 #include "Character/LyraCharacter.h"
 #include "Camera/LyraCameraComponent.h"
 #include "LyraPawnExtensionComponent.h"
+#include "AbilitySystem/LyraAbilitySystemComponent.h"
 
 // Sets default values
 ALyraCharacter::ALyraCharacter()
@@ -19,6 +20,12 @@ ALyraCharacter::ALyraCharacter()
 		CameraComponent = CreateDefaultSubobject<ULyraCameraComponent>(TEXT("CameraComponent"));
 		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
 	}
+}
+
+UAbilitySystemComponent* ALyraCharacter::GetAbilitySystemComponent() const
+{
+	// 앞서, 우리는 PawnExtensionComponent에 AbilitySystemComponent를 캐싱하였다
+	return PawnExtComponent->GetLyraAbilitySystemComponent();
 }
 
 // Called when the game starts or when spawned
