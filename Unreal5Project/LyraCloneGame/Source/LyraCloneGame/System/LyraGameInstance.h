@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "CommonGameInstance.h"
 #include "LyraGameInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LYRACLONEGAME_API ULyraGameInstance : public UGameInstance
+class LYRACLONEGAME_API ULyraGameInstance : public UCommonGameInstance
 {
 	GENERATED_BODY()
 	

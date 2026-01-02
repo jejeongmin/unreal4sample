@@ -9,7 +9,7 @@ public class LyraCloneGame : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { 
-            "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
+            "Core", "CoreUObject", "Engine",
             // GAS
             "GameplayTags",
             "GameplayTasks",
@@ -23,6 +23,12 @@ public class LyraCloneGame : ModuleRules
             "EnhancedInput",
             // CommonUser
             "CommonUser",
+            // CommonGame
+            "CommonGame",
+            // CommonUI
+            "CommonUI",
+            // UMG
+            "UMG",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
