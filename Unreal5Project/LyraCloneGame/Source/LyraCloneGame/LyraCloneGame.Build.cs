@@ -29,6 +29,8 @@ public class LyraCloneGame : ModuleRules
             "CommonUI",
             // UMG
             "UMG",
+            // UIExtension
+            "UIExtension",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

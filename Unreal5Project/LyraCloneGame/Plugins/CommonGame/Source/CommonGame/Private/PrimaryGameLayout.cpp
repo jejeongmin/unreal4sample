@@ -8,6 +8,11 @@ UPrimaryGameLayout::UPrimaryGameLayout(const FObjectInitializer& ObjectInitializ
 {
 }
 
+UCommonActivatableWidgetContainerBase* UPrimaryGameLayout::GetLayerWidget(FGameplayTag LayerName)
+{
+	return Layers.FindRef(LayerName);
+}
+
 void UPrimaryGameLayout::RegisterLayer(FGameplayTag LayerTag, UCommonActivatableWidgetContainerBase* LayerWidget)
 {
 	if (!IsDesignTime())
