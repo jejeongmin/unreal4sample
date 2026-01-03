@@ -20,6 +20,10 @@ class LYRACLONEGAME_API ULyraExperienceDefinition : public UPrimaryDataAsset
 public:
 	ULyraExperienceDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+#if WITH_EDITORONLY_DATA
+	virtual void UpdateAssetBundleData() override;
+#endif
+
 	/**
 	 * member variables
 	 */

@@ -12,6 +12,7 @@
 #include "LyraExperienceDefinition.h"
 #include "LyraLog.h"
 #include <Kismet/GameplayStatics.h>
+#include "UI/LyraHUD.h"
 
 ALyraGameModeBase::ALyraGameModeBase()
 {
@@ -19,6 +20,7 @@ ALyraGameModeBase::ALyraGameModeBase()
 	PlayerControllerClass = ALyraPlayerController::StaticClass();
 	PlayerStateClass = ALyraPlayerState::StaticClass();
 	DefaultPawnClass = ALyraCharacter::StaticClass();
+	HUDClass = ALyraHUD::StaticClass();
 }
 
 void ALyraGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)

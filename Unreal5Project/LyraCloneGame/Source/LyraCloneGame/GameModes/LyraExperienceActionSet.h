@@ -19,6 +19,10 @@ class LYRACLONEGAME_API ULyraExperienceActionSet : public UPrimaryDataAsset
 public:
 	ULyraExperienceActionSet();
 
+#if WITH_EDITORONLY_DATA
+	virtual void UpdateAssetBundleData() override;
+#endif
+
 	/**
 	 * member variables
 	 */

@@ -14,7 +14,8 @@
 				"CoreUObject",
 				"GameFeatures",
 				"GameplayAbilities",
-				"CommonGame"
+				"CommonGame",
+				"CommonUI"
 			]
 		}
 	],

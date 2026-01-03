@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "UIExtensionSystem.h"
+#include "Blueprint/UserWidget.h"
 
 void FUIExtensionHandle::Unregister()
 {
