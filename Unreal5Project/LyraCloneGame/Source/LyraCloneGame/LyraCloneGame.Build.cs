@@ -31,6 +31,9 @@ public class LyraCloneGame : ModuleRules
             "UMG",
             // UIExtension
             "UIExtension",
+            // Slate
+            "Slate",
+            "SlateCore",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

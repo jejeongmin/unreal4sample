@@ -15,7 +15,8 @@
 				"GameFeatures",
 				"GameplayAbilities",
 				"CommonGame",
-				"CommonUI"
+				"CommonUI",
+				"UMG"
 			]
 		}
 	],
