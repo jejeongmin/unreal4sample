@@ -8,10 +8,16 @@
 #include "AbilitySystem/LyraAbilitySystemComponent.h"
 #include "AbilitySystem/LyraAbilitySet.h"
 #include "Character/LyraPawnData.h"
+#include <AbilitySystem/Attributes/LyraHealthSet.h>
+#include <AbilitySystem/Attributes/LyraCombatSet.h>
 
 ALyraPlayerState::ALyraPlayerState(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<ULyraAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
+
+	// Attributes 는 AbilitySystemComponent 와 같은 Outer 에 속해야 한다
+	CreateDefaultSubobject<ULyraHealthSet>(TEXT("HealthSet"));
+	CreateDefaultSubobject<ULyraCombatSet>(TEXT("CombatSet"));
 }
 
 void ALyraPlayerState::PostInitializeComponents()
