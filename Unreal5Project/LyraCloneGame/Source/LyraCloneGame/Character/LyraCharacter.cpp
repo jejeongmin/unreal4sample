@@ -5,6 +5,7 @@
 #include "Camera/LyraCameraComponent.h"
 #include "LyraPawnExtensionComponent.h"
 #include "AbilitySystem/LyraAbilitySystemComponent.h"
+#include "Character/LyraHealthComponent.h"
 
 // Sets default values
 ALyraCharacter::ALyraCharacter()
@@ -14,11 +15,20 @@ ALyraCharacter::ALyraCharacter()
 
 	// PawnExtComponent 생성
 	PawnExtComponent = CreateDefaultSubobject<ULyraPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
+	{
+		PawnExtComponent->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+		PawnExtComponent->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
+	}
 
 	// CameraComponent 생성
 	{
 		CameraComponent = CreateDefaultSubobject<ULyraCameraComponent>(TEXT("CameraComponent"));
 		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
+	}
+
+	// HealthComponent 생성
+	{
+		HealthComponent = CreateDefaultSubobject<ULyraHealthComponent>(TEXT("HealthComponent"));
 	}
 }
 
@@ -53,3 +63,16 @@ void ALyraCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+void ALyraCharacter::OnAbilitySystemInitialized()
+{
+	ULyraAbilitySystemComponent* LyraASC = Cast<ULyraAbilitySystemComponent>(GetAbilitySystemComponent());
+	check(LyraASC);
+
+	// HealthComponent의 ASC를 통한 초기화
+	HealthComponent->InitializeWithAbilitySystem(LyraASC);
+}
+
+void ALyraCharacter::OnAbilitySystemUninitialized()
+{
+	HealthComponent->UninitializeWithAbilitySystem();
+}

@@ -9,6 +9,7 @@
 
 class ULyraPawnExtensionComponent;
 class ULyraCameraComponent;
+class ULyraHealthComponent;
 
 UCLASS()
 class LYRACLONEGAME_API ALyraCharacter : public AModularCharacter, public IAbilitySystemInterface
@@ -18,6 +19,9 @@ class LYRACLONEGAME_API ALyraCharacter : public AModularCharacter, public IAbili
 public:
 	// Sets default values for this character's properties
 	ALyraCharacter();
+
+	void OnAbilitySystemInitialized();
+	void OnAbilitySystemUninitialized();
 
 	/**
 	 * IAbilitySystemInterface
@@ -40,4 +44,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character")
 	TObjectPtr<ULyraCameraComponent> CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character")
+	TObjectPtr<ULyraHealthComponent> HealthComponent;
 };
