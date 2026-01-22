@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "LyraInventoryItemDefinition.generated.h"
 
+class ULyraInventoryItemInstance;
 
 /**
  * Inventory에 대한 Fragment은 확 와닫지 않을 수 있다:
@@ -20,6 +21,8 @@ class ULyraInventoryItemFragment : public UObject
 {
 	GENERATED_BODY()
 public:
+	/** interface to call when inventory item instance is added to ULyraInventoryManagerComponent's InventoryList */
+	virtual void OnInstanceCreated(ULyraInventoryItemInstance* Instance) const {}
 };
 
 /**
