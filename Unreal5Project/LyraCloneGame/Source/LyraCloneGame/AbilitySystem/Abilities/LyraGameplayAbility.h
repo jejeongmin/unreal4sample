@@ -17,6 +17,8 @@ enum class ELyraAbilityActivationPolicy : uint8
 	OnSpawn,
 };
 
+class ULyraAbilityCost;
+
 /**
  * 
  */
@@ -28,7 +30,17 @@ class LYRACLONEGAME_API ULyraGameplayAbility : public UGameplayAbility
 public:
 	ULyraGameplayAbility(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	/**
+	 * UGameplayAbility interfaces
+	 */
+	virtual bool CheckCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
+	virtual void ApplyCost(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) const override;
+
 	/** 언제 GA가 활성화될지 정책 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Lyra|AbilityActivation")
 	ELyraAbilityActivationPolicy ActivationPolicy;
+
+	/** ability costs to apply LyraGameplayAbility separately */
+	UPROPERTY(EditDefaultsOnly, Instanced, Category = "Lyra|Costs")
+	TArray<TObjectPtr<ULyraAbilityCost>> AdditionalCosts;
 };

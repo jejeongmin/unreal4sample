@@ -7,6 +7,8 @@
 #include "LyraGameplayAbility_FromEquipment.generated.h"
 
 class ULyraEquipmentInstance;
+class ULyraInventoryItemInstance;
+
 /**
  * 
  */
@@ -16,4 +18,5 @@ class LYRACLONEGAME_API ULyraGameplayAbility_FromEquipment : public ULyraGamepla
 	GENERATED_BODY()
 public:
 	ULyraEquipmentInstance* GetAssociatedEquipment() const;
+	ULyraInventoryItemInstance* GetAssociatedItem() const;
 };
