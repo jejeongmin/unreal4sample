@@ -1,0 +1,1 @@
+EnemyAI.AIActive 에서 PawnSensing Component 가 길을 찾기 위해서는 레벨이 빌드되어야 레벨에 배치된 Navi Mesh Bounce Volume 이 동작한다.
