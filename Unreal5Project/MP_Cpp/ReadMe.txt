@@ -26,3 +26,10 @@ PIELogins=(UserName="Player1",Password="test")
 PIELogins=(UserName="Player2",Password="test")
 
 이 방식도 실제 사용자들이 사용한 설정 예시로 공유되어 있습니다.
+
+
+Q2. 
+강의 중 steam 세션을 사용하려고 하면
+
+A2. 
+백그라운드에서 실제 steam client 를 실행해둬야 합니다.
