@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Interaction/MP_Player.h"
 #include "MP_CppCharacter.generated.h"
 
 class USpringArmComponent;
@@ -16,7 +17,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AMP_CppCharacter : public ACharacter
+class AMP_CppCharacter : public ACharacter, public IMP_Player
 {
 	GENERATED_BODY()
 
@@ -44,8 +45,17 @@ class AMP_CppCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** General Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* GeneralAction;
+
 public:
 	AMP_CppCharacter();
+
+	/** IMP_Player Interface */
+	virtual USkeletalMeshComponent* GetPlayerMesh_Implementation() override;
+
+	virtual void GrantArmor_Implementation(float ArmorAmount) override;
 	
 
 protected:
@@ -55,6 +65,9 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	/** Called for general input */
+	void GeneralInput(const FInputActionValue& Value);
 			
 
 protected:
@@ -68,5 +81,15 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	//////////////// Crash Course /////////////////////
+	// 1. Override GetLifetimeReplicatedProps to specify which properties should be replicated to clients
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+private:
+
+	// 2. Add the UPROPERTY macro with Replicated to the variable you want to replicate. This will ensure that the variable's value is sent from the server to all clients.
+	UPROPERTY(Replicated)
+	float	Armor;
 };
 

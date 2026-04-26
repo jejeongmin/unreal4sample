@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Net/UnrealNetwork.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -54,6 +55,18 @@ AMP_CppCharacter::AMP_CppCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+USkeletalMeshComponent* AMP_CppCharacter::GetPlayerMesh_Implementation()
+{
+	return GetMesh();
+}
+
+void AMP_CppCharacter::GrantArmor_Implementation(float ArmorAmount)
+{
+	Armor += ArmorAmount;
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Granted %f armor. Current armor: %f"), ArmorAmount, Armor));
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -85,11 +98,22 @@ void AMP_CppCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::Look);
+
+		// General input example
+		EnhancedInputComponent->BindAction(GeneralAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::GeneralInput);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AMP_CppCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	// 3. Call the DOREPLIFETIME macro for each replicated variable, specifying the class and variable name.
+	DOREPLIFETIME(ThisClass, Armor);
 }
 
 void AMP_CppCharacter::Move(const FInputActionValue& Value)
@@ -126,4 +150,9 @@ void AMP_CppCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AMP_CppCharacter::GeneralInput(const FInputActionValue& Value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current armor: %f"), Armor));
 }
