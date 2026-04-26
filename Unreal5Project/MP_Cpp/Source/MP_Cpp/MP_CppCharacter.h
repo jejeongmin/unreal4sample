@@ -12,6 +12,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UMP_HealthComponent;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -56,6 +57,10 @@ public:
 	virtual USkeletalMeshComponent* GetPlayerMesh_Implementation() override;
 
 	virtual void GrantArmor_Implementation(float ArmorAmount) override;
+
+	virtual void IncementPickupCount_Implementation() override;
+
+	virtual void IncreaseHealth_Implementation(float HealthAmount) override;
 	
 
 protected:
@@ -85,11 +90,23 @@ public:
 	//////////////// Crash Course /////////////////////
 	// 1. Override GetLifetimeReplicatedProps to specify which properties should be replicated to clients
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker) override;
 
 private:
 
 	// 2. Add the UPROPERTY macro with Replicated to the variable you want to replicate. This will ensure that the variable's value is sent from the server to all clients.
 	UPROPERTY(Replicated)
 	float	Armor;
+
+	UPROPERTY(ReplicatedUsing=OnRep_PickupCount)
+	int32	PickupCount = 0;
+
+	UFUNCTION()
+	void OnRep_PickupCount(int32 PreviousValue);
+
+	bool	bReplicatedPickupCount = false;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UMP_HealthComponent> HealthComponent;
 };
 

@@ -28,4 +28,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void GrantArmor(float ArmorAmount);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void IncementPickupCount();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void IncreaseHealth(float HealthAmount);
 };

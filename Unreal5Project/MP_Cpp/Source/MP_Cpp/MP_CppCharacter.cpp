@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Net/UnrealNetwork.h"
+#include "Components/MP_HealthComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -53,6 +54,8 @@ AMP_CppCharacter::AMP_CppCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	HealthComponent = CreateDefaultSubobject<UMP_HealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->SetIsReplicated(true);
 }
 
 USkeletalMeshComponent* AMP_CppCharacter::GetPlayerMesh_Implementation()
@@ -65,6 +68,20 @@ void AMP_CppCharacter::GrantArmor_Implementation(float ArmorAmount)
 	Armor += ArmorAmount;
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Granted %f armor. Current armor: %f"), ArmorAmount, Armor));
+}
+
+void AMP_CppCharacter::IncementPickupCount_Implementation()
+{
+	++PickupCount;
+}
+
+void AMP_CppCharacter::IncreaseHealth_Implementation(float HealthAmount)
+{
+	if (IsValid(HealthComponent))
+	{
+		float CurrentHealth = HealthComponent->GetHealth();
+		HealthComponent->SetHealth(CurrentHealth + HealthAmount);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -113,7 +130,24 @@ void AMP_CppCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	// 3. Call the DOREPLIFETIME macro for each replicated variable, specifying the class and variable name.
-	DOREPLIFETIME(ThisClass, Armor);
+	//DOREPLIFETIME(ThisClass, Armor);
+	DOREPLIFETIME_CONDITION(ThisClass, Armor, COND_InitialOnly);		// Condition 다양하게 바꿔가면서 테스트해보기
+	//DOREPLIFETIME(ThisClass, PickupCount);
+	DOREPLIFETIME_CONDITION(ThisClass, PickupCount, COND_Custom);
+}
+
+void AMP_CppCharacter::PreReplication(IRepChangedPropertyTracker& ChangedPropertyTracker)
+{
+	Super::PreReplication(ChangedPropertyTracker);
+
+	// 4. Override PreReplication and use the SetCustomIsActiveOverride function to specify when the variable should be replicated.
+	// In this example, PickupCount will only replicate when it's value is greater than 0.
+	DOREPLIFETIME_ACTIVE_OVERRIDE(ThisClass, PickupCount, bReplicatedPickupCount);
+}
+
+void AMP_CppCharacter::OnRep_PickupCount(int32 PreviousValue)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Current pickup count: %d -> %d"), PreviousValue, PickupCount));
 }
 
 void AMP_CppCharacter::Move(const FInputActionValue& Value)
@@ -154,5 +188,7 @@ void AMP_CppCharacter::Look(const FInputActionValue& Value)
 
 void AMP_CppCharacter::GeneralInput(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current armor: %f"), Armor));
+	bReplicatedPickupCount = !bReplicatedPickupCount;		// This will toggle the replication of PickupCount, allowing us to test the replication condition
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current armor: %f, bReplicatedPickupCount: %s"), Armor, bReplicatedPickupCount ? TEXT("true") : TEXT("false")));
 }
