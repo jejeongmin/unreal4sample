@@ -50,6 +50,14 @@ class AMP_CppCharacter : public ACharacter, public IMP_Player
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* GeneralAction;
 
+	/** Spawn Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SpawnAction;
+
+	/** Server RPC Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ServerRPCAction;
+
 public:
 	AMP_CppCharacter();
 
@@ -73,13 +81,18 @@ protected:
 
 	/** Called for general input */
 	void GeneralInput(const FInputActionValue& Value);
-			
 
-protected:
+	/** Called for spawn input */
+	void SpawnInput(const FInputActionValue& Value);
+
+	/** Called for server rpc input */
+	void ServerRpcInput(const FInputActionValue& Value);
 
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void BeginPlay() override;
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -108,5 +121,16 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UMP_HealthComponent> HealthComponent;
+
+	// Remote Procedure Call (RPC) - Client, Server, and NetMulticast functions
+
+	UFUNCTION(Client, Reliable)
+	void Client_PrintMessage(const FString& Message);
+
+	FTimerHandle RpcDelayTimer;
+	void OnRpcDelayTimer();
+
+	UFUNCTION(Server, Reliable)
+	void Server_PrintMessage(const FString& Message);
 };
 

@@ -19,6 +19,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(Client, Reliable)
+	void Client_PrintActorName();
+
+	UFUNCTION(Server, Reliable)
+	void Server_PrintActorName();
+
+	virtual void OnRep_Owner() override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -11,8 +11,15 @@ AMP_Actor::AMP_Actor()
 
 	bNetLoadOnClient = true;
 	bReplicates = true;
+	bAlwaysRelevant = true;
 
 	SetReplicateMovement(true);
+
+	if (!RootComponent)
+	{
+		RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+		//RootComponent->SetIsReplicated(true);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -20,8 +27,40 @@ void AMP_Actor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const bool bAuth = HasAuthority();
-	const ENetRole LocalRole = GetLocalRole();
+	//if (HasAuthority())
+	//{
+	//	Client_PrintActorName();
+	//}
+}
+
+void AMP_Actor::Client_PrintActorName_Implementation()
+{
+	FString	MessageString = HasAuthority() ? "Server:" : "Client:";
+	MessageString += FString::Printf(TEXT(" Actor name is %s"), *GetName());
+
+	GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Yellow, MessageString);
+}
+
+void AMP_Actor::Server_PrintActorName_Implementation()
+{
+	FString	MessageString = HasAuthority() ? "Server:" : "Client:";
+	MessageString += FString::Printf(TEXT(" Actor name is %s"), *GetName());
+
+	GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Purple, MessageString);
+}
+
+void AMP_Actor::OnRep_Owner()
+{
+	Super::OnRep_Owner();
+
+	if (HasAuthority())
+	{
+		Client_PrintActorName();
+	}
+	else
+	{
+		Server_PrintActorName();
+	}	
 }
 
 // Called every frame

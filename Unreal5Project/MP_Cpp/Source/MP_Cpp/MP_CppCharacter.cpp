@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "Net/UnrealNetwork.h"
 #include "Components/MP_HealthComponent.h"
+#include <Actors/MP_Actor.h>
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -118,11 +119,25 @@ void AMP_CppCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// General input example
 		EnhancedInputComponent->BindAction(GeneralAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::GeneralInput);
+
+		// Spawn input example
+		EnhancedInputComponent->BindAction(SpawnAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::SpawnInput);
+
+		// Server Rpc input
+		EnhancedInputComponent->BindAction(ServerRPCAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::ServerRpcInput);
+
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AMP_CppCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GetWorldTimerManager().SetTimer(RpcDelayTimer, this, &AMP_CppCharacter::OnRpcDelayTimer, 4.f, false);
 }
 
 void AMP_CppCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -148,6 +163,28 @@ void AMP_CppCharacter::PreReplication(IRepChangedPropertyTracker& ChangedPropert
 void AMP_CppCharacter::OnRep_PickupCount(int32 PreviousValue)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Current pickup count: %d -> %d"), PreviousValue, PickupCount));
+}
+
+void AMP_CppCharacter::OnRpcDelayTimer()
+{
+	if (HasAuthority())
+	{
+		Client_PrintMessage(FString("This should run on the owning client"));
+	}
+}
+
+void AMP_CppCharacter::Server_PrintMessage_Implementation(const FString& Message)
+{
+	FString	MessageString = HasAuthority() ? FString::Printf(TEXT("Server: %s"), *Message) : FString::Printf(TEXT("Client: %s"), *Message);
+
+	GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Purple, MessageString);
+}
+
+void AMP_CppCharacter::Client_PrintMessage_Implementation(const FString& Message)
+{
+	FString	MessageString = HasAuthority() ? FString::Printf(TEXT("Server: %s"), *Message) : FString::Printf(TEXT("Client: %s"), *Message);
+
+	GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Yellow, MessageString);
 }
 
 void AMP_CppCharacter::Move(const FInputActionValue& Value)
@@ -191,4 +228,33 @@ void AMP_CppCharacter::GeneralInput(const FInputActionValue& Value)
 	bReplicatedPickupCount = !bReplicatedPickupCount;		// This will toggle the replication of PickupCount, allowing us to test the replication condition
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current armor: %f, bReplicatedPickupCount: %s"), Armor, bReplicatedPickupCount ? TEXT("true") : TEXT("false")));
+}
+
+void AMP_CppCharacter::SpawnInput(const FInputActionValue& Value)
+{
+	if(false == HasAuthority())
+	{
+		return;
+	}
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this; //Cast<APlayerController>(GetController());
+
+	// Example: Spawn an actor of class AMP_Actor at the character's location
+	if (UWorld* World = GetWorld())
+	{
+		FVector SpawnLocation = GetActorLocation();
+		FRotator SpawnRotation = GetActorRotation();
+		AMP_Actor* NewActor = World->SpawnActor<AMP_Actor>(AMP_Actor::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+
+		//if (NewActor)
+		//{
+		//	NewActor->SetOwner(Cast<APlayerController>(GetController()));
+		//}
+	}
+}
+
+void AMP_CppCharacter::ServerRpcInput(const FInputActionValue& Value)
+{
+	Server_PrintMessage("Please run this on the server");
 }
