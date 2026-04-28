@@ -137,7 +137,8 @@ void AMP_CppCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(RpcDelayTimer, this, &AMP_CppCharacter::OnRpcDelayTimer, 4.f, false);
+	GetWorldTimerManager().SetTimer(RpcDelayTimer, this, &AMP_CppCharacter::OnRpcDelayTimer, 3.f, false);
+	GetWorldTimerManager().SetTimer(MultiCastDelayTimer, this, &AMP_CppCharacter::OnMultiCastDelayTimer, 6.f, false);
 }
 
 void AMP_CppCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -171,6 +172,23 @@ void AMP_CppCharacter::OnRpcDelayTimer()
 	{
 		Client_PrintMessage(FString("This should run on the owning client"));
 	}
+}
+
+void AMP_CppCharacter::OnMultiCastDelayTimer()
+{
+	Multicast_PrintMessage(FString("Print this on the server and all relevant clients"));
+}
+
+bool AMP_CppCharacter::Server_PrintMessage_Validate(const FString& Message)
+{
+	return !Message.IsEmpty();
+}
+
+void AMP_CppCharacter::Multicast_PrintMessage_Implementation(const FString& Message)
+{
+	FString	MessageString = HasAuthority() ? FString::Printf(TEXT("Server: %s"), *Message) : FString::Printf(TEXT("Client: %s"), *Message);
+
+	GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Cyan, MessageString);
 }
 
 void AMP_CppCharacter::Server_PrintMessage_Implementation(const FString& Message)
@@ -256,5 +274,6 @@ void AMP_CppCharacter::SpawnInput(const FInputActionValue& Value)
 
 void AMP_CppCharacter::ServerRpcInput(const FInputActionValue& Value)
 {
+	//Server_PrintMessage("");	// kick off a server RPC by validation, Server_PrintMessage_Validate
 	Server_PrintMessage("Please run this on the server");
 }
