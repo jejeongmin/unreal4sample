@@ -58,6 +58,14 @@ class AMP_CppCharacter : public ACharacter, public IMP_Player
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ServerRPCAction;
 
+	/** Team Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* TeamAction;
+
+	/** Pickup Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PickupAction;
+
 public:
 	AMP_CppCharacter();
 
@@ -87,6 +95,12 @@ protected:
 
 	/** Called for server rpc input */
 	void ServerRpcInput(const FInputActionValue& Value);
+
+	/** Called for team input */
+	void TeamInput(const FInputActionValue& Value);
+
+	/** Called for pickup input */
+	void PickupInput(const FInputActionValue& Value);
 
 	virtual void NotifyControllerChanged() override;
 

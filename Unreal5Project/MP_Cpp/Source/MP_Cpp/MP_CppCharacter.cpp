@@ -13,6 +13,9 @@
 #include "Net/UnrealNetwork.h"
 #include "Components/MP_HealthComponent.h"
 #include <Actors/MP_Actor.h>
+#include <Kismet/GameplayStatics.h>
+#include <Game/MP_GameState.h>
+#include <Player/MP_PlayerState.h>
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -126,6 +129,11 @@ void AMP_CppCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		// Server Rpc input
 		EnhancedInputComponent->BindAction(ServerRPCAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::ServerRpcInput);
 
+		// Team input example
+		EnhancedInputComponent->BindAction(TeamAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::TeamInput);
+
+		// Pickup input example
+		EnhancedInputComponent->BindAction(PickupAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::PickupInput);
 	}
 	else
 	{
@@ -265,6 +273,8 @@ void AMP_CppCharacter::SpawnInput(const FInputActionValue& Value)
 		FRotator SpawnRotation = GetActorRotation();
 		AMP_Actor* NewActor = World->SpawnActor<AMP_Actor>(AMP_Actor::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
 
+		UE_LOG(LogTemplateCharacter, Log, TEXT("Owner name: %s, NetRole: %s, NetRemoteRole: %s"), *GetOwner()->GetName(), *UEnum::GetValueAsString(GetLocalRole()), *UEnum::GetValueAsString(GetRemoteRole()));
+
 		//if (NewActor)
 		//{
 		//	NewActor->SetOwner(Cast<APlayerController>(GetController()));
@@ -276,4 +286,32 @@ void AMP_CppCharacter::ServerRpcInput(const FInputActionValue& Value)
 {
 	//Server_PrintMessage("");	// kick off a server RPC by validation, Server_PrintMessage_Validate
 	Server_PrintMessage("Please run this on the server");
+}
+
+void AMP_CppCharacter::TeamInput(const FInputActionValue& Value)
+{
+	AMP_GameState* MPGameState = Cast<AMP_GameState>(UGameplayStatics::GetGameState(this));
+	APlayerController* PC = Cast<APlayerController>(GetController());
+
+	if (IsValid(MPGameState) && IsValid(PC))
+	{
+		if (MPGameState->IsTeamOne(PC))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Player is on Team One")));
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Player is on Team Two")));
+		}
+	}
+}
+
+void AMP_CppCharacter::PickupInput(const FInputActionValue& Value)
+{
+	AMP_PlayerState* MPPlayerState = Cast<AMP_PlayerState>(GetPlayerState());
+	if (!IsValid(MPPlayerState))
+		return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange,\
+		FString::Printf(TEXT("%s pickup count : %d"), *MPPlayerState->GetPlayerName(), MPPlayerState->GetNumPickups()));
 }

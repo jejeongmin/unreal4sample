@@ -4,8 +4,9 @@
 #include "Actors/MP_Pickup.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/Character.h"
 #include <Interaction/MP_Player.h>
-
+#include <Player/MP_PlayerState.h>
 
 // Sets default values
 AMP_Pickup::AMP_Pickup()
@@ -50,15 +51,27 @@ void AMP_Pickup::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 	
 	// This will only happen on the server.
-	if (OtherActor->Implements<UMP_Player>())
-	{
-		IMP_Player* PlayerInterface = Cast<IMP_Player>(OtherActor);
-		if (PlayerInterface)
-		{
-			IMP_Player::Execute_IncementPickupCount(OtherActor);
-			IMP_Player::Execute_IncreaseHealth(OtherActor, HealthValue);
-			Destroy();
-		}
-	}
+	if (!OtherActor->Implements<UMP_Player>())
+		return;
+	
+	IMP_Player* PlayerInterface = Cast<IMP_Player>(OtherActor);
+	if (!PlayerInterface)
+		return;
+	
+	IMP_Player::Execute_IncementPickupCount(OtherActor);
+	IMP_Player::Execute_IncreaseHealth(OtherActor, HealthValue);		
+
+	ACharacter* OtherCharacter = Cast<ACharacter>(OtherActor);
+	if (!IsValid(OtherCharacter))
+		return;
+	
+	APlayerState* PlayerState = OtherCharacter->GetPlayerState();
+	AMP_PlayerState* MPPlayerState = Cast<AMP_PlayerState>(PlayerState);
+	if (!IsValid(MPPlayerState))
+		return;
+	
+	MPPlayerState->SetNumPickups(MPPlayerState->GetNumPickups() + 1);
+
+	Destroy();
 }
 
