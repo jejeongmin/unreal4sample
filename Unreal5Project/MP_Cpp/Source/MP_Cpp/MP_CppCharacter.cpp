@@ -91,6 +91,14 @@ void AMP_CppCharacter::IncreaseHealth_Implementation(float HealthAmount)
 //////////////////////////////////////////////////////////////////////////
 // Input
 
+void AMP_CppCharacter::ServerTravelInput()
+{
+	if (HasAuthority())
+	{
+		GetWorld()->ServerTravel("DestinationMap");
+	}
+}
+
 void AMP_CppCharacter::NotifyControllerChanged()
 {
 	Super::NotifyControllerChanged();
@@ -134,6 +142,9 @@ void AMP_CppCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Pickup input example
 		EnhancedInputComponent->BindAction(PickupAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::PickupInput);
+
+		// Server Travel input example
+		EnhancedInputComponent->BindAction(ServerTravelAction, ETriggerEvent::Triggered, this, &AMP_CppCharacter::ServerTravelInput);
 	}
 	else
 	{

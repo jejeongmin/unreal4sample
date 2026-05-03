@@ -66,6 +66,10 @@ class AMP_CppCharacter : public ACharacter, public IMP_Player
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* PickupAction;
 
+	/** ServerTravel Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ServerTravelAction;
+
 public:
 	AMP_CppCharacter();
 
@@ -101,6 +105,9 @@ protected:
 
 	/** Called for pickup input */
 	void PickupInput(const FInputActionValue& Value);
+
+	/** Called for server travel input */
+	void ServerTravelInput();
 
 	virtual void NotifyControllerChanged() override;
 
