@@ -8,6 +8,9 @@ public class PuzzlePlatforms : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
-	}
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
+
+        // Always include the module root directory ("./") in the include path
+        PublicIncludePaths.Add(ModuleDirectory);
+    }
 }
