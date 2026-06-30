@@ -5,6 +5,16 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
+#include "Components/TextBlock.h"
+#include "ServerRow.h"
+
+UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+	ConstructorHelpers::FClassFinder<UUserWidget> ServerRowBPClass(TEXT("/Game/MenuSystem/WBP_ServerRow"));
+	if (!ensure(ServerRowBPClass.Class != nullptr)) return;
+
+	ServerRowClass = ServerRowBPClass.Class;
+}
 
 bool UMainMenu::Initialize()
 {
@@ -17,14 +27,23 @@ bool UMainMenu::Initialize()
 	if (!ensure(JoinButton != nullptr)) return false;
 	JoinButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
 
+	if (!ensure(ListButton != nullptr)) return false;
+	ListButton->OnClicked.AddDynamic(this, &UMainMenu::OpenListMenu);
+
 	if (!ensure(QuitButton != nullptr)) return false;
 	QuitButton->OnClicked.AddDynamic(this, &UMainMenu::QuitPressed);
 
 	if (!ensure(CancelJoinMenuButton != nullptr)) return false;
 	CancelJoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 
+	if (!ensure(CancelListMenuButton != nullptr)) return false;
+	CancelListMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
+
 	if (!ensure(ConfirmJoinMenuButton != nullptr)) return false;
 	ConfirmJoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
+
+	if (!ensure(ConfirmListMenuButton != nullptr)) return false;
+	ConfirmListMenuButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServerList);
 
 	return true;
 }
@@ -62,6 +81,17 @@ void UMainMenu::OpenMainMenu()
 	MenuSwitcher->SetActiveWidget(MainMenu);
 }
 
+void UMainMenu::OpenListMenu()
+{
+	if (!ensure(MenuSwitcher != nullptr)) return;
+	if (!ensure(ListMenu != nullptr)) return;
+	MenuSwitcher->SetActiveWidget(ListMenu);
+
+	if (_MenuInterface != nullptr) {
+		_MenuInterface->RefreshServerList();
+	}
+}
+
 void UMainMenu::JoinServer()
 {
 	if (_MenuInterface != nullptr)
@@ -69,5 +99,36 @@ void UMainMenu::JoinServer()
 		if (!ensure(IPAddressField != nullptr)) return;
 		const FString& Address = IPAddressField->GetText().ToString();
 		_MenuInterface->Join(Address);
+	}
+}
+
+void UMainMenu::JoinServerList()
+{
+	if (_MenuInterface != nullptr)
+	{
+		//UWorld* World = GetWorld();
+		//if (!ensure(World != nullptr)) return;
+
+		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
+		if (!ensure(Row != nullptr)) return;
+
+		Row->ServerName->SetText(FText::FromString("Test Server"));
+
+		ServerList->AddChild(Row);
+	}
+}
+
+void UMainMenu::SetServerList(TArray<FString> ServerNames)
+{
+	ServerList->ClearChildren();
+
+	for (const FString& ServerName : ServerNames)
+	{
+		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
+		if (!ensure(Row != nullptr)) return;
+
+		Row->ServerName->SetText(FText::FromString(ServerName));
+
+		ServerList->AddChild(Row);
 	}
 }

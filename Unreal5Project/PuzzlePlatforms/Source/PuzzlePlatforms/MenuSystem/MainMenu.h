@@ -14,10 +14,20 @@ class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 {
 	GENERATED_BODY()
 	
+public:
+
+	UMainMenu(const FObjectInitializer& ObjectInitializer);
+
+	void SetServerList(TArray<FString> ServerNames);
+
 protected:
+
 	virtual bool Initialize();
 
 private:
+
+	TSubclassOf<class UUserWidget> ServerRowClass;
+
 	UPROPERTY(meta = (BindWidget))
 	class UButton* HostButton;
 
@@ -25,10 +35,19 @@ private:
 	class UButton* JoinButton;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* ListButton;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* CancelJoinMenuButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ConfirmJoinMenuButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* CancelListMenuButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ConfirmListMenuButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UWidgetSwitcher* MenuSwitcher;
@@ -40,10 +59,16 @@ private:
 	class UWidget* JoinMenu;
 
 	UPROPERTY(meta = (BindWidget))
+	class UWidget* ListMenu;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* IPAddressField;
+
+	UPROPERTY(meta = (BindWidget))
+	class UPanelWidget* ServerList;
 
 	UFUNCTION()
 	void HostServer();
@@ -52,10 +77,16 @@ private:
 	void JoinServer();
 
 	UFUNCTION()
+	void JoinServerList();
+
+	UFUNCTION()
 	void OpenJoinMenu();
 
 	UFUNCTION()
 	void OpenMainMenu();
+
+	UFUNCTION()
+	void OpenListMenu();
 
 	UFUNCTION()
 	void QuitPressed();
