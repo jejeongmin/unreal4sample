@@ -104,17 +104,14 @@ void UMainMenu::JoinServer()
 
 void UMainMenu::JoinServerList()
 {
-	if (_MenuInterface != nullptr)
+	if (SelectedIndex.IsSet() && _MenuInterface != nullptr)
 	{
-		//UWorld* World = GetWorld();
-		//if (!ensure(World != nullptr)) return;
-
-		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
-		if (!ensure(Row != nullptr)) return;
-
-		Row->ServerName->SetText(FText::FromString("Test Server"));
-
-		ServerList->AddChild(Row);
+		UE_LOG(LogTemp, Warning, TEXT("Selected index %d."), SelectedIndex.GetValue());
+		_MenuInterface->JoinByIndex(SelectedIndex.GetValue());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Selected index not set."));
 	}
 }
 
@@ -122,13 +119,21 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames)
 {
 	ServerList->ClearChildren();
 
+	uint32 i = 0;
 	for (const FString& ServerName : ServerNames)
 	{
 		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
 		if (!ensure(Row != nullptr)) return;
 
 		Row->ServerName->SetText(FText::FromString(ServerName));
+		Row->Setup(this, i);
+		++i;
 
 		ServerList->AddChild(Row);
 	}
+}
+
+void UMainMenu::SelectIndex(uint32 Index)
+{
+	SelectedIndex = Index;
 }
