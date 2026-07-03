@@ -20,6 +20,10 @@ public:
 	class UTextBlock* ServerName;
 
 	void Setup(class UMainMenu* Parent, uint32 Index);
+	void SetSelected(bool bSelected);
+
+protected:
+	virtual bool Initialize() override;
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -29,7 +33,15 @@ private:
 	class UMainMenu* Parent;
 
 	uint32 Index;
-
+	bool bIsSelected = false;
+	
 	UFUNCTION()
 	void OnClicked();
+
+private:
+	UFUNCTION()
+	void OnRowHovered();
+
+	UFUNCTION()
+	void OnRowUnhovered();
 };
