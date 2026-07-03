@@ -11,7 +11,8 @@ public class PuzzlePlatforms : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]{ 
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", 
 			"UMG", 
-			"OnlineSubsystem", "OnlineSubsystemUtils" });
+			"OnlineSubsystem", "OnlineSubsystemUtils",
+			"OnlineSubsystemSteam" });
 
         // Always include the module root directory ("./") in the include path
         PublicIncludePaths.Add(ModuleDirectory);
