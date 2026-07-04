@@ -34,11 +34,17 @@ void UServerRow::OnClicked()
 
 void UServerRow::OnRowHovered()
 {
+	if(IsHeader)
+		return;
+
 	ServerName->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
 }
 
 void UServerRow::OnRowUnhovered()
 {
+	if (IsHeader)
+		return;
+
 	// 선택된 상태가 아닐 때만 흰색으로 복원
 	if (!bIsSelected)
 	{
@@ -53,6 +59,9 @@ void UServerRow::OnRowUnhovered()
 
 void UServerRow::SetSelected(bool bSelected)
 {
+	if (IsHeader)
+		return;
+
 	bIsSelected = bSelected;
 
 	// 선택 상태에 따라 시각적 변경

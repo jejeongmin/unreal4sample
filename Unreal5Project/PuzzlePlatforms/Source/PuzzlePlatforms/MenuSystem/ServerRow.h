@@ -19,6 +19,15 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ServerName;
 
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* HostUser;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* ConnectionFraction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Server Row")
+	bool IsHeader = false;
+
 	void Setup(class UMainMenu* Parent, uint32 Index);
 	void SetSelected(bool bSelected);
 

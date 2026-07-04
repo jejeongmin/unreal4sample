@@ -6,6 +6,17 @@
 #include "MenuWidget.h"
 #include "MainMenu.generated.h"
 
+USTRUCT()
+struct FServerData
+{
+	GENERATED_BODY()
+
+	FString Name;
+	uint16 CurrentPlayers;
+	uint16 MaxPlayers;
+	FString HostUsername;
+};
+
 /**
  * 
  */
@@ -18,7 +29,7 @@ public:
 
 	UMainMenu(const FObjectInitializer& ObjectInitializer);
 
-	void SetServerList(TArray<FString> ServerNames);
+	void SetServerList(TArray<FServerData> ServerDatas);
 
 	void SelectIndex(uint32 Index);
 
@@ -72,6 +83,18 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UPanelWidget* ServerList;
 
+	UPROPERTY(meta = (BindWidget))
+	class UWidget* HostMenu;
+
+	UPROPERTY(meta = (BindWidget))
+	class UEditableTextBox* ServerHostName;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* CancelHostMenuButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ConfirmHostMenuButton;
+
 	UFUNCTION()
 	void HostServer();
 
@@ -92,6 +115,9 @@ private:
 
 	UFUNCTION()
 	void QuitPressed();
+
+	UFUNCTION()
+	void OpenHostMenu();
 
 	TOptional<uint32> SelectedIndex;
 
