@@ -27,7 +27,32 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+
+	// The mass of the car (kg).
+	UPROPERTY(EditAnywhere)
+	float Mass = 1000;
+
+	// The force applied to the car when the throttle is fully down (N).
+	UPROPERTY(EditAnywhere)
+	float MaxDrivingForce = 10000;
+
+	// The number of degrees rotated per second at full control throw (degrees/s).
+	UPROPERTY(EditAnywhere)
+	float MaxDegreesPerSecond = 90;
+
+	// Higher means more drag.
+	UPROPERTY(EditAnywhere)
+	float DragCoefficient = 16;
+
 	void MoveForward(float Value);
+	void MoveRight(float Value);
+
+	void UpdateLocationFromVelocity(float DeltaTime);
+	void ApplyRotation(float DeltaTime);
+	FVector GetResistance();
 
 	FVector Velocity;
+
+	float Throttle;
+	float SteeringThrow;
 };
