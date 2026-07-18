@@ -15,6 +15,8 @@ public:
 	// Sets default values for this pawn's properties
 	AGoKart();
 
+	FString GetEnumText(ENetRole RoleValue);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,20 +38,31 @@ private:
 	UPROPERTY(EditAnywhere)
 	float MaxDrivingForce = 10000;
 
-	// The number of degrees rotated per second at full control throw (degrees/s).
+	// Minimum radius of the car turning circle at full lock (m).
 	UPROPERTY(EditAnywhere)
-	float MaxDegreesPerSecond = 90;
+	float MinTurningRadius = 10;
 
 	// Higher means more drag.
 	UPROPERTY(EditAnywhere)
 	float DragCoefficient = 16;
 
+	// Higher means more rolling resistance.
+	UPROPERTY(EditAnywhere)
+	float RollingResistanceCoefficient = 0.015;
+
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_MoveForward(float Value);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_MoveRight(float Value);
+
 	void UpdateLocationFromVelocity(float DeltaTime);
 	void ApplyRotation(float DeltaTime);
-	FVector GetResistance();
+	FVector GetAirResistance();
+	FVector GetRollingResistance();;
 
 	FVector Velocity;
 
