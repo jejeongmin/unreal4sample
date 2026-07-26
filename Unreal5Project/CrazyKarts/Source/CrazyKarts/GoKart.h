@@ -4,39 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "GoKartMovementComponent.h"
+#include "GoKartMovementReplicator.h"
 #include "GoKart.generated.h"
 
-USTRUCT()
-struct FGoKartMove
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY()
-	float Throttle;
-	UPROPERTY()
-	float SteeringThrow;
-
-	UPROPERTY()
-	float DeltaTime;
-	UPROPERTY()
-	float Time;
-};
-
-
-USTRUCT()
-struct FGoKartState
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY()
-	FTransform Tranform;
-
-	UPROPERTY()
-	FVector Velocity;
-
-	UPROPERTY()
-	FGoKartMove LastMove;
-};
 
 UCLASS()
 class CRAZYKARTS_API AGoKart : public APawn
@@ -62,51 +33,11 @@ public:
 
 private:
 
-	void SimulateMove(const FGoKartMove& Move);
-	FGoKartMove CreateMove(float DeltaTime);
-	void ClearAcknowledgeMoves(FGoKartMove LastMove);
-
-	// The mass of the car (kg).
-	UPROPERTY(EditAnywhere)
-	float Mass = 1000;
-
-	// The force applied to the car when the throttle is fully down (N).
-	UPROPERTY(EditAnywhere)
-	float MaxDrivingForce = 10000;
-
-	// Minimum radius of the car turning circle at full lock (m).
-	UPROPERTY(EditAnywhere)
-	float MinTurningRadius = 10;
-
-	// Higher means more drag.
-	UPROPERTY(EditAnywhere)
-	float DragCoefficient = 16;
-
-	// Higher means more rolling resistance.
-	UPROPERTY(EditAnywhere)
-	float RollingResistanceCoefficient = 0.015;
-
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
-	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_SendMove(FGoKartMove Move);
-
-	void UpdateLocationFromVelocity(float DeltaTime);
-	void ApplyRotation(float DeltaTime, float aSteeringThrow);
-	FVector GetAirResistance();
-	FVector GetRollingResistance();;
-
-	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
-	FGoKartState ServerState;
-
-	FVector Velocity;
-
-	UFUNCTION()
-	void OnRep_ServerState();
-
-	float Throttle;
-	float SteeringThrow;
-
-	TArray<FGoKartMove> UnacknowledgedMoves;
+	UPROPERTY(VisibleAnywhere)
+	UGoKartMovementComponent* MovementComponent;
+	UPROPERTY(VisibleAnywhere)
+	UGoKartMovementReplicator* MovementReplicator;
 };
